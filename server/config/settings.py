@@ -40,8 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     "rest_framework",
     "corsheaders",
+
+    "users",
+    "wines",
+    "cellar",
 ]
 
 MIDDLEWARE = [
@@ -140,3 +145,6 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+
+AUTH_USER_MODEL = "users.User"
