@@ -117,7 +117,7 @@ Completed:
 
 #### Wine Catalog
 
-
+```text
 GET /api/wineries/
 GET /api/wineries/:id/
 
@@ -126,26 +126,28 @@ GET /api/regions/:id/
 
 GET /api/wines/
 GET /api/wines/:id/
-
+```
 
 #### Cellar
 
-
+```text
 GET    /api/cellar/
 POST   /api/cellar/
 GET    /api/cellar/:id/
 PATCH  /api/cellar/:id/
 DELETE /api/cellar/:id/
-
+```
 
 #### Tasting Notes
 
-
+```text
 GET    /api/tasting-notes/
 POST   /api/tasting-notes/
 GET    /api/tasting-notes/:id/
 PATCH  /api/tasting-notes/:id/
 DELETE /api/tasting-notes/:id/
+```
+
 
 ### Phase 3 Validation
 
@@ -172,6 +174,165 @@ The following API behavior has been verified:
 
 
 
+### Phase 4 — Authentication & Permissions
+
+Completed:
+
+- Installed and configured Django REST Framework Simple JWT
+- Configured JWT authentication for Django REST Framework
+- Retained session authentication for development and browsable API testing
+- Created user registration endpoint
+- Created JWT login/token endpoint
+- Created JWT refresh endpoint
+- Created current-user endpoint
+- Added Simple JWT token blacklist support
+- Created authenticated logout endpoint
+- Configured logout to blacklist refresh tokens
+- Configured private API resources to authenticate through JWT
+- Verified cellar ownership using JWT-authenticated users
+- Verified tasting-note ownership protections
+- Added public-read/admin-write permissions to the wine catalog
+- Restricted wine, winery, and region modifications to admin users
+
+### Phase 4 Authentication Endpoints
+
+```text
+POST /api/auth/register/
+POST /api/auth/token/
+POST /api/auth/token/refresh/
+POST /api/auth/logout/
+GET  /api/auth/me/
+```
+
+### Phase 4 Authentication Flow
+
+```text
+Register / Login
+        ↓
+Django validates credentials
+        ↓
+Access Token + Refresh Token
+        ↓
+Client sends Access Token
+        ↓
+Authorization: Bearer <access_token>
+        ↓
+Django identifies request.user
+        ↓
+Protected resource access
+```
+
+When an access token expires, the refresh token can be used to request a new access token.
+
+On logout, the refresh token is blacklisted so it cannot be used to generate additional access tokens.
+
+### Phase 4 Permissions
+
+#### Public Users
+
+- Browse wines
+- View individual wines
+- Browse wineries
+- View individual wineries
+- Browse regions
+- View individual regions
+- Register
+- Log in
+
+#### Authenticated Users
+
+- Access their own cellar
+- Create cellar entries
+- Update their own cellar entries
+- Delete their own cellar entries
+- Access their own tasting notes
+- Create tasting notes
+- Update their own tasting notes
+- Delete their own tasting notes
+- View their authenticated user information
+
+#### Admin Users
+
+Admin users have catalog-management permissions in addition to authenticated-user permissions.
+
+Admins can:
+
+- Create wines
+- Update wines
+- Delete wines
+- Create wineries
+- Update wineries
+- Delete wineries
+- Create regions
+- Update regions
+- Delete regions
+
+### Phase 4 Validation
+
+The following authentication and permission behavior has been verified:
+
+- New users can register successfully
+- Registered users can obtain JWT access and refresh tokens
+- Valid access tokens authenticate protected API requests
+- `/api/auth/me/` returns the correct authenticated user
+- Refresh tokens successfully generate new access tokens
+- New access tokens successfully authenticate API requests
+- Logout successfully blacklists the supplied refresh token
+- Blacklisted refresh tokens cannot generate new access tokens
+- Unauthenticated users cannot access private cellar data
+- Unauthenticated users cannot access private tasting-note data
+- Cellar entries created with JWT authentication are automatically assigned to the authenticated user
+- Users can retrieve their own cellar entries
+- Users cannot retrieve another user's cellar entries
+- Users cannot retrieve another user's tasting notes
+- Public users can read wine catalog data
+- Regular authenticated users can read wine catalog data
+- Regular authenticated users cannot modify wine catalog data
+- Admin users can modify wine catalog data
+- Django system checks pass successfully
+
+## Local Development
+
+### Frontend
+
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### Backend
+
+```bash
+cd server
+source venv/bin/activate
+python manage.py runserver
+```
+
+## Environment Variables
+
+Backend database credentials and other server secrets are stored in:
+
+```text
+server/.env
+```
+
+Environment files are excluded from Git and must not be committed.
+
+## Development Workflow
+
+VinoVault is being built in structured phases.
+
+After every completed phase:
+
+1. Run phase completion tests
+2. Update `README.md`
+3. Review Git changes
+4. Commit changes
+5. Push to the remote repository
+6. Begin the next phase only after the push succeeds
+
+
 ## Next Phase
 
-Phase 4 — Authentication & Permissions
+Phase 5 — React Foundation
