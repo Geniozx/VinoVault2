@@ -10,3 +10,14 @@ export async function getWines() {
 
   return response.json();
 }
+
+
+export async function getWineById(id) {
+  const response = await apiRequest(`/wines/${id}/`);
+
+  if (!response.ok) {
+    throw new Error("Unable to load wine.");
+  }
+
+  return response.json();
+}

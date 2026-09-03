@@ -45,7 +45,8 @@ vinovault2/
 - Phase 3 — Core Django REST API ✅
 - Phase 4 — Authentication & Permissions ✅
 - Phase 5 — React Foundation ✅
-- Phase 6 — Wine Catalog — Next
+- Phase 6 — Wine Catalog ✅
+- Phase 7 — Personal Cellar — Next
 
 ---
 
@@ -555,6 +556,175 @@ After every completed phase:
 5. Push to the remote repository
 6. Begin the next phase only after the push succeeds
 
+
+
+---
+
+## Phase 6 — Wine Catalog
+
+Completed:
+
+- Created reusable `WineCard` component
+- Created reusable `WineGrid` component
+- Refactored the Browse Wines page to use reusable wine components
+- Connected the wine catalog to the Django REST API
+- Displayed wine catalog information including:
+  - Wine name
+  - Vintage
+  - Winery
+  - Region
+  - Country
+  - Wine type
+  - Varietal
+  - Wine image when available
+- Created individual Wine Details pages
+- Added dynamic wine detail routing using `/wines/:id`
+- Added API service support for retrieving individual wines
+- Added navigation between the wine catalog and wine detail pages
+- Added graceful handling for invalid or nonexistent wine IDs
+- Added client-side wine search
+- Added wine-type filtering
+- Added combined search and filter behavior
+- Added reusable loading, error, and empty-state components
+- Added appropriate loading states while retrieving catalog data
+- Added user-facing API error handling
+- Added an empty state when no wines match the current search or filter
+- Verified existing authentication and protected-route behavior remained functional
+
+### Phase 6 Wine Catalog Components
+
+```text
+client/src/components/
+├── ui/
+│   ├── EmptyState.jsx
+│   ├── ErrorMessage.jsx
+│   └── Loading.jsx
+└── wines/
+    ├── WineCard.jsx
+    └── WineGrid.jsx
+```
+
+### Phase 6 Wine Service
+
+The frontend wine service now supports retrieving both the complete catalog and individual wines:
+
+```text
+getWines()
+getWineById(id)
+```
+
+These functions communicate with:
+
+```text
+GET /api/wines/
+GET /api/wines/:id/
+```
+
+### Phase 6 Catalog Flow
+
+```text
+Browse Wines
+      ↓
+GET /api/wines/
+      ↓
+Wine data stored in React state
+      ↓
+Search + Type Filter
+      ↓
+Filtered wine collection
+      ↓
+WineGrid
+      ↓
+WineCard
+      ↓
+View Details
+      ↓
+/wines/:id
+      ↓
+GET /api/wines/:id/
+      ↓
+Wine Details
+```
+
+### Phase 6 Search
+
+Users can search the loaded wine catalog by:
+
+- Wine name
+- Varietal
+- Winery
+- Region
+- Country
+
+Search is case-insensitive.
+
+### Phase 6 Wine Type Filters
+
+The catalog supports filtering by:
+
+- Red
+- White
+- Rosé
+- Sparkling
+- Dessert
+- Fortified
+
+Search and wine-type filters can be used simultaneously.
+
+### Phase 6 UI States
+
+Reusable frontend components now handle the major API states:
+
+```text
+Fetching data
+    ↓
+Loading
+
+Request failure
+    ↓
+ErrorMessage
+
+No matching results
+    ↓
+EmptyState
+
+Successful results
+    ↓
+WineGrid
+```
+
+These components can be reused throughout later VinoVault phases.
+
+### Phase 6 Validation
+
+The following Wine Catalog behavior has been verified:
+
+- Wine catalog data loads successfully from Django
+- Wine cards render successfully
+- Wine information displays correctly on catalog cards
+- Wine detail links navigate to the correct dynamic route
+- Individual wine data loads successfully
+- Wine Details displays the correct wine
+- Back to Browse navigation works
+- Invalid or nonexistent wine IDs display a friendly error
+- Invalid wine IDs do not crash the React application
+- Search by wine name works
+- Search by varietal works
+- Search by winery works
+- Search by region works
+- Search by country works
+- Wine-type filtering works
+- Search and filtering work together
+- Searches with no matches display the empty state
+- Loading states render while data is being retrieved
+- API errors display through the reusable error component
+- Protected cellar routes remain protected
+- Existing authentication behavior remains functional
+- ESLint passes with no errors
+- Vite production build completes successfully
+
+
+
 ## Next Phase
 
-Phase 6 — Wine Catalog
+Phase 7 — Personal Cellar
