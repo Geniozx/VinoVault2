@@ -46,7 +46,8 @@ vinovault2/
 - Phase 4 — Authentication & Permissions ✅
 - Phase 5 — React Foundation ✅
 - Phase 6 — Wine Catalog ✅
-- Phase 7 — Personal Cellar — Next
+- Phase 7 — Personal Cellar ✅
+- Phase 8 — Tasting Notes — Next
 
 ---
 
@@ -725,6 +726,198 @@ The following Wine Catalog behavior has been verified:
 
 
 
+---
+
+## Phase 7 — Personal Cellar
+
+Completed:
+
+- Connected the protected React cellar pages to the Django REST API
+- Created a dedicated cellar API service layer
+- Created reusable `CellarCard` components
+- Built the authenticated My Cellar page
+- Added loading, error, and empty states to the cellar
+- Created individual cellar-entry detail pages
+- Added dynamic cellar-entry routing
+- Displayed wine information alongside personal cellar information
+- Added cellar-entry editing
+- Added quantity editing
+- Added purchase-date editing
+- Added purchase-price editing
+- Added storage-location editing
+- Added personal-notes editing
+- Added cellar-entry deletion
+- Added deletion confirmation before removing a wine
+- Added catalog-to-cellar integration
+- Added an authenticated Add to My Cellar flow
+- Added wine selection through URL query parameters
+- Added cellar-entry creation through the Django REST API
+- Added automatic navigation to newly created cellar entries
+- Added authentication-aware Add to Cellar controls on Wine Details
+- Preserved backend ownership isolation for all cellar operations
+- Preserved the unique user/wine cellar constraint
+- Added user-facing handling for duplicate cellar entries
+- Reused Phase 6 loading, error, and empty-state components throughout the cellar experience
+
+### Phase 7 Cellar Routes
+
+All personal cellar routes require authentication:
+
+```text
+/cellar
+/cellar/add
+/cellar/:id
+/cellar/:id/edit
+```
+
+The Add Cellar Entry route accepts the selected wine through a query parameter:
+
+```text
+/cellar/add?wine=:wineId
+```
+
+### Phase 7 Cellar Service
+
+The frontend cellar service supports:
+
+```text
+getCellarEntries()
+getCellarEntryById(id)
+createCellarEntry(entryData)
+updateCellarEntry(id, entryData)
+deleteCellarEntry(id)
+```
+
+These functions communicate with the protected Django endpoints:
+
+```text
+GET    /api/cellar/
+POST   /api/cellar/
+GET    /api/cellar/:id/
+PATCH  /api/cellar/:id/
+DELETE /api/cellar/:id/
+```
+
+JWT access tokens are included in protected cellar API requests.
+
+### Phase 7 Personal Cellar Flow
+
+```text
+Authenticated User
+        ↓
+My Cellar
+        ↓
+GET /api/cellar/
+        ↓
+User-owned entries only
+        ↓
+CellarCard
+        ↓
+View Details
+        ↓
+/cellar/:id
+        ↓
+View / Edit / Remove
+```
+
+### Phase 7 Add-to-Cellar Flow
+
+```text
+Browse Wines
+      ↓
+Wine Details
+      ↓
+Add to My Cellar
+      ↓
+/cellar/add?wine=:wineId
+      ↓
+Load selected wine
+      ↓
+Enter cellar information
+      ↓
+POST /api/cellar/
+      ↓
+Django assigns authenticated user
+      ↓
+New Cellar Entry
+      ↓
+/cellar/:id
+```
+
+Unauthenticated users are shown a login option instead of direct access to the protected Add Cellar Entry page.
+
+### Phase 7 Editable Cellar Information
+
+Users can manage:
+
+- Quantity
+- Purchase date
+- Purchase price
+- Storage location
+- Personal notes
+
+Wine catalog information remains associated with the selected `Wine` record rather than being duplicated in the cellar entry.
+
+### Phase 7 Ownership & Data Protection
+
+Cellar ownership continues to be enforced by Django.
+
+The frontend does not submit a user ID when creating cellar entries.
+
+Instead:
+
+```text
+JWT Access Token
+      ↓
+Django request.user
+      ↓
+CellarEntry.user
+```
+
+Protected cellar querysets only return records owned by the authenticated user.
+
+Attempting to access another user's cellar entry results in a not-found response rather than exposing the record.
+
+The database also prevents a user from creating multiple cellar entries for the same wine.
+
+### Phase 7 Validation
+
+The following Personal Cellar behavior has been verified:
+
+- Authenticated users can load their personal cellar
+- Empty cellars display the reusable empty state
+- Existing cellar entries render successfully
+- Cellar cards display the associated wine information
+- View Details navigates to the correct cellar entry
+- Individual cellar entries load successfully
+- Invalid or unauthorized cellar-entry IDs display an error
+- Users can edit cellar quantity
+- Users can edit purchase date
+- Users can edit purchase price
+- Users can edit storage location
+- Users can edit personal notes
+- Updated cellar data persists after browser refresh
+- Users can cancel editing without modifying the entry
+- Users can remove wines from their cellar
+- Delete confirmation can be cancelled without removing the entry
+- Confirmed deletion removes the entry
+- Deleted entries remain deleted after browser refresh
+- Authenticated users can add wines from the Wine Details page
+- The Add Cellar Entry form loads the correct selected wine
+- Newly created entries redirect to their detail page
+- Newly created entries appear in My Cellar
+- Duplicate cellar entries are rejected
+- Duplicate-entry failures display a user-facing error
+- Unauthenticated users cannot access cellar routes
+- Users cannot retrieve another user's cellar entries
+- Existing authentication behavior remains functional
+- Existing Wine Catalog behavior remains functional
+- ESLint passes with no errors
+- Vite production build completes successfully
+
+
+
+
 ## Next Phase
 
-Phase 7 — Personal Cellar
+Phase 8 — Tasting Notes

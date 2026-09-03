@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { getWineById } from "../services/wineService";
+import { useAuth } from "../context/useAuth";
 
 
 function WineDetails() {
   const { id } = useParams();
+  const { isAuthenticated } = useAuth();
 
   const [wine, setWine] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -78,6 +80,17 @@ function WineDetails() {
 
       {wine.description && (
         <p>{wine.description}</p>
+      )}
+
+
+      {isAuthenticated ? (
+        <Link to={`/cellar/add?wine=${wine.id}`}>
+          Add to My Cellar
+        </Link>
+      ) : (
+        <Link to="/login">
+          Login to Add to Cellar
+        </Link>
       )}
     </main>
   );
