@@ -14,25 +14,31 @@ function Navbar() {
 
     return (
         <header>
-        <nav>
-            <Link to="/">VinoVault</Link>
+            <nav>
+                <Link to="/">VinoVault</Link>
 
-            <Link to="/browse">Browse Wines</Link>
+                <Link to="/browse">Browse Wines</Link>
 
-            {isAuthenticated ? (
-            <>
-                <Link to="/cellar">My Cellar</Link>
-                <button type="button" onClick={handleLogout}>
-                Logout
-                </button>
-            </>
-            ) : (
-            <>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
-            </>
-            )}
-        </nav>
+                {isAuthenticated ? (
+                    <>
+                        <Link to="/cellar">My Cellar</Link>
+
+                        <Link to="/tasting-notes">
+                            Tasting Notes
+                        </Link>
+
+
+                        <button type="button" onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/login">Login</Link>
+                        <Link to="/register">Register</Link>
+                    </>
+                )}
+            </nav>
         </header>
     );
 }

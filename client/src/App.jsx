@@ -15,6 +15,10 @@ import AddCellarEntry from "./pages/AddCellarEntry";
 import CellarEntryDetails from "./pages/CellarEntryDetails";
 import EditCellarEntry from "./pages/EditCellarEntry";
 import NotFound from "./pages/NotFound";
+import AddTastingNote from "./pages/AddTastingNote";
+import TastingNoteDetails from "./pages/TastingNoteDetails";
+import EditTastingNote from "./pages/EditTastingNote";
+import MyTastingNotes from "./pages/MyTastingNotes";
 
 
 function App() {
@@ -62,6 +66,43 @@ function App() {
           element={
             <ProtectedRoute>
               <EditCellarEntry />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasting-notes/add"
+          element={
+            <ProtectedRoute>
+              <AddTastingNote />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasting-notes/:id"
+          element={
+            <ProtectedRoute>
+              <TastingNoteDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tasting-notes/:id/edit"
+          element={
+            <ProtectedRoute>
+              <EditTastingNote />
+            </ProtectedRoute>
+          }
+        />
+
+
+        <Route
+          path="/tasting-notes"
+          element={
+            <ProtectedRoute>
+              <MyTastingNotes />
             </ProtectedRoute>
           }
         />

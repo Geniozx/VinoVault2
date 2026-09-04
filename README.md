@@ -47,7 +47,8 @@ vinovault2/
 - Phase 5 — React Foundation ✅
 - Phase 6 — Wine Catalog ✅
 - Phase 7 — Personal Cellar ✅
-- Phase 8 — Tasting Notes — Next
+- Phase 8 — Tasting Notes ✅
+- Phase 9 — Next
 
 ---
 
@@ -918,6 +919,152 @@ The following Personal Cellar behavior has been verified:
 
 
 
+---
+
+## Phase 8 — Tasting Notes
+
+Completed:
+
+- Created a dedicated tasting-note API service layer
+- Added tasting-note list, detail, create, edit, and delete functionality
+- Added protected tasting-note routes
+- Added reusable `TastingNoteCard` components
+- Built the My Tasting Notes page
+- Added loading, error, and empty states
+- Added Add Tasting Note flow from Wine Details
+- Added tasting-note creation through the Django REST API
+- Added tasting-note detail pages
+- Added tasting-note editing
+- Added tasting-note deletion with confirmation
+- Added tasting-note history to individual Wine Details pages
+- Added authentication-aware tasting-note controls
+- Preserved backend ownership isolation
+- Verified invalid and unauthorized tasting-note IDs return friendly errors
+- Verified deleted notes disappear from wine history
+- Verified ESLint passes
+- Verified Vite production build completes successfully
+
+### Phase 8 Tasting Note Routes
+
+Protected routes:
+
+```text
+/tasting-notes
+/tasting-notes/add
+/tasting-notes/:id
+/tasting-notes/:id/edit
+```
+
+The Add Tasting Note page accepts the selected wine through a query parameter:
+
+```text
+/tasting-notes/add?wine=:wineId
+```
+
+### Phase 8 Tasting Note Service
+
+The frontend tasting-note service supports:
+
+```text
+getTastingNotes()
+getTastingNoteById(id)
+createTastingNote(noteData)
+updateTastingNote(id, noteData)
+deleteTastingNote(id)
+```
+
+These functions communicate with:
+
+```text
+GET    /api/tasting-notes/
+POST   /api/tasting-notes/
+GET    /api/tasting-notes/:id/
+PATCH  /api/tasting-notes/:id/
+DELETE /api/tasting-notes/:id/
+```
+
+JWT access tokens are included with protected requests.
+
+### Phase 8 Tasting Note Flow
+
+```text
+Authenticated User
+        ↓
+Wine Details
+        ↓
+Add Tasting Note
+        ↓
+/tasting-notes/add?wine=:wineId
+        ↓
+Enter Rating / Date / Notes
+        ↓
+POST /api/tasting-notes/
+        ↓
+Tasting Note Details
+```
+
+### Phase 8 Tasting History Flow
+
+```text
+My Tasting Notes
+        ↓
+TastingNoteCard
+        ↓
+View Tasting Note
+        ↓
+Edit or Delete
+        ↓
+Return to My Tasting Notes
+```
+
+Wine Details also displays the authenticated user's tasting-note history for that wine.
+
+### Phase 8 Ownership & Authentication
+
+Tasting-note ownership remains enforced by Django.
+
+The frontend does not submit a user ID when creating tasting notes.
+
+Instead:
+
+```text
+JWT Access Token
+      ↓
+Django request.user
+      ↓
+TastingNote.user
+```
+
+Protected tasting-note querysets only return records owned by the authenticated user.
+
+### Phase 8 Validation
+
+Verified:
+
+- Tasting-note list loads for authenticated users
+- Empty tasting-note collections show an empty state
+- Tasting notes can be created
+- Created notes redirect to their detail page
+- Tasting-note details load correctly
+- Invalid tasting-note IDs show a friendly error
+- Tasting notes can be edited
+- Edited values persist after refresh
+- Tasting notes can be deleted
+- Delete confirmation can be cancelled
+- Confirmed deletion removes the note
+- Deleted notes remain deleted after refresh
+- Deleted notes disappear from Wine Details history
+- Wine Details shows tasting-note history for the selected wine
+- Wines with no tasting notes show an empty-history message
+- Protected tasting-note routes redirect unauthenticated users to login
+- Users cannot access another user's tasting notes
+- Existing wine catalog behavior remains functional
+- Existing cellar behavior remains functional
+- ESLint passes with no errors
+- Vite production build completes successfully
+
+
+
 ## Next Phase
 
-Phase 8 — Tasting Notes
+Phase 9 — Dashboard & Collection Experience

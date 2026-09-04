@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { getWineById } from "../services/wineService";
+import { getTastingNotes } from "../services/tastingNoteService";
 import { useAuth } from "../context/useAuth";
 
 
@@ -10,6 +11,7 @@ function WineDetails() {
   const { isAuthenticated } = useAuth();
 
   const [wine, setWine] = useState(null);
+  const [tastingNotes, setTastingNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -18,6 +20,20 @@ function WineDetails() {
       try {
         const data = await getWineById(id);
         setWine(data);
+
+        if (isAuthenticated) {
+          try {
+            const notes = await getTastingNotes();
+
+            const wineNotes = notes.filter(
+              (note) => note.wine.id === Number(id)
+            );
+
+            setTastingNotes(wineNotes);
+          } catch {
+            setTastingNotes([]);
+          }
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -26,7 +42,8 @@ function WineDetails() {
     }
 
     loadWine();
-  }, [id]);
+  }, [id, isAuthenticated]);
+
 
   if (loading) {
     return (
@@ -83,6 +100,33 @@ function WineDetails() {
       )}
 
 
+      {isAuthenticated && (
+        <section>
+          <h3>Your Tasting Notes</h3>
+
+          {tastingNotes.length === 0 ? (
+            <p>You have not added a tasting note for this wine yet.</p>
+          ) : (
+            tastingNotes.map((note) => (
+              <div key={note.id}>
+                <p>Rating: {note.rating} / 5</p>
+
+                {note.tasted_on && (
+                  <p>Tasted On: {note.tasted_on}</p>
+                )}
+
+                <p>{note.notes}</p>
+
+                <Link to={`/tasting-notes/${note.id}`}>
+                  View Tasting Note
+                </Link>
+              </div>
+            ))
+          )}
+        </section>
+      )}
+
+
       {isAuthenticated ? (
         <Link to={`/cellar/add?wine=${wine.id}`}>
           Add to My Cellar
@@ -90,6 +134,12 @@ function WineDetails() {
       ) : (
         <Link to="/login">
           Login to Add to Cellar
+        </Link>
+      )}
+
+      {isAuthenticated && (
+        <Link to={`/tasting-notes/add?wine=${wine.id}`}>
+          Add Tasting Note
         </Link>
       )}
     </main>
