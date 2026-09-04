@@ -25,7 +25,7 @@ function Login() {
         password,
       });
 
-      navigate("/cellar");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.message);
     } finally {

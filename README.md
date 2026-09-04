@@ -48,7 +48,8 @@ vinovault2/
 - Phase 6 — Wine Catalog ✅
 - Phase 7 — Personal Cellar ✅
 - Phase 8 — Tasting Notes ✅
-- Phase 9 — Next
+- Phase 9 — Dashboard & Collection Experience ✅
+- Phase 10 — Next
 
 ---
 
@@ -1065,6 +1066,225 @@ Verified:
 
 
 
+---
+
+## Phase 9 — Dashboard & Collection Experience
+
+Completed:
+
+* Created a protected authenticated-user dashboard
+* Connected the dashboard to the personal cellar API
+* Connected the dashboard to the tasting-note API
+* Added collection overview statistics
+* Added unique wine count
+* Added total bottle count
+* Added tasting-note count
+* Added collection breakdown by wine type
+* Added average tasting rating
+* Added recent cellar additions
+* Added recent tasting-note activity
+* Added direct links from recent activity to detail pages
+* Added dashboard quick actions
+* Added authenticated dashboard navigation
+* Updated successful login navigation to redirect to the dashboard
+* Preserved logout navigation back to the public home page
+* Added dashboard loading and error states
+* Verified protected dashboard behavior
+* Verified existing Wine Catalog, Personal Cellar, and Tasting Notes functionality
+* Verified ESLint passes
+* Verified Vite production build completes successfully
+
+### Phase 9 Dashboard Route
+
+The dashboard is protected by authentication:
+
+```text
+/dashboard
+```
+
+Unauthenticated users attempting to access the dashboard are redirected to:
+
+```text
+/login
+```
+
+Successful authentication now redirects users to:
+
+```text
+/dashboard
+```
+
+### Phase 9 Dashboard Data
+
+The dashboard loads the authenticated user's existing cellar and tasting-note data:
+
+```text
+GET /api/cellar/
+GET /api/tasting-notes/
+```
+
+Both requests use the authenticated user's JWT access token.
+
+The dashboard does not maintain a separate copy of collection data. Instead, statistics are calculated from the existing API responses.
+
+### Phase 9 Collection Overview
+
+The dashboard displays:
+
+* Unique Wines
+* Total Bottles
+* Tasting Notes
+* Collection by Wine Type
+* Average Tasting Rating
+
+Unique wines are calculated from the number of personal cellar entries.
+
+Total bottles are calculated by summing the quantity of each cellar entry:
+
+```text
+Cellar Entries
+      ↓
+quantity + quantity + quantity
+      ↓
+Total Bottles
+```
+
+### Phase 9 Collection Breakdown
+
+The authenticated user's cellar is grouped by wine type.
+
+Example:
+
+```text
+red: 3
+white: 2
+sparkling: 1
+```
+
+The breakdown is calculated from the wine associated with each cellar entry.
+
+### Phase 9 Tasting Summary
+
+When tasting notes exist, the dashboard calculates the user's average tasting rating.
+
+```text
+Tasting Note Ratings
+        ↓
+Sum of Ratings
+        ↓
+Divide by Number of Notes
+        ↓
+Average Rating
+```
+
+The displayed result is rounded to one decimal place.
+
+When no tasting notes exist, the dashboard displays an empty tasting-summary message.
+
+### Phase 9 Recent Activity
+
+The dashboard displays up to three recent cellar additions and three recent tasting notes.
+
+```text
+Cellar Entries
+      ↓
+Sort by created_at
+      ↓
+Newest First
+      ↓
+First 3
+```
+
+```text
+Tasting Notes
+      ↓
+Sort by created_at
+      ↓
+Newest First
+      ↓
+First 3
+```
+
+Recent cellar additions link directly to:
+
+```text
+/cellar/:id
+```
+
+Recent tasting notes link directly to:
+
+```text
+/tasting-notes/:id
+```
+
+### Phase 9 Dashboard Flow
+
+```text
+Login
+  ↓
+Dashboard
+  ↓
+Collection Overview
+  ↓
+Recent Activity
+  ↓
+Quick Actions
+  ↓
+Browse / My Cellar / Tasting Notes
+```
+
+### Phase 9 Navigation
+
+Authenticated users can navigate directly to:
+
+```text
+Dashboard
+My Cellar
+Tasting Notes
+Browse Wines
+```
+
+Browse remains available publicly.
+
+Logout continues to:
+
+```text
+Clear authentication
+        ↓
+Return to /
+```
+
+### Phase 9 Validation
+
+Verified:
+
+* Dashboard loads for authenticated users
+* Dashboard redirects unauthenticated users to login
+* Successful login redirects to the dashboard
+* Logout returns to the public home page
+* Unique wine count is correct
+* Total bottle calculation is correct
+* Tasting-note count is correct
+* Wine-type collection breakdown is correct
+* Average tasting rating calculation is correct
+* Empty collection states are handled
+* Empty tasting-summary states are handled
+* Recent cellar additions display correctly
+* Recent tasting notes display correctly
+* Recent cellar links open the correct cellar entries
+* Recent tasting-note links open the correct tasting notes
+* Dashboard quick actions work
+* Dashboard navbar navigation works
+* Browse Wines remains functional
+* Personal Cellar remains functional
+* Tasting Notes remains functional
+* Existing authentication behavior remains functional
+* ESLint passes with no errors
+* Vite production build completes successfully
+
+
+
+
 ## Next Phase
 
-Phase 9 — Dashboard & Collection Experience
+Phase 10 — TBD

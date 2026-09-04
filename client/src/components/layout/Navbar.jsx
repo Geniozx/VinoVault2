@@ -28,6 +28,11 @@ function Navbar() {
                         </Link>
 
 
+                        <Link to="/dashboard">
+                            Dashboard
+                        </Link>
+
+
                         <button type="button" onClick={handleLogout}>
                             Logout
                         </button>

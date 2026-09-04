@@ -19,6 +19,7 @@ import AddTastingNote from "./pages/AddTastingNote";
 import TastingNoteDetails from "./pages/TastingNoteDetails";
 import EditTastingNote from "./pages/EditTastingNote";
 import MyTastingNotes from "./pages/MyTastingNotes";
+import Dashboard from "./pages/Dashboard";
 
 
 function App() {
@@ -103,6 +104,16 @@ function App() {
           element={
             <ProtectedRoute>
               <MyTastingNotes />
+            </ProtectedRoute>
+          }
+        />
+
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
             </ProtectedRoute>
           }
         />

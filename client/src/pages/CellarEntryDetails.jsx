@@ -7,7 +7,7 @@ import Loading from "../components/ui/Loading";
 import { 
   deleteCellarEntry,
   getCellarEntryById,
- } from "../services/cellarService";
+} from "../services/cellarService";
 
 
 function CellarEntryDetails() {
