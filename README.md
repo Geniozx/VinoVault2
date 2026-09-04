@@ -40,16 +40,28 @@ vinovault2/
 
 ## Current Development Status
 
-- Phase 1 — Project Foundation ✅
-- Phase 2 — Django Models & Database ✅
-- Phase 3 — Core Django REST API ✅
-- Phase 4 — Authentication & Permissions ✅
-- Phase 5 — React Foundation ✅
-- Phase 6 — Wine Catalog ✅
-- Phase 7 — Personal Cellar ✅
-- Phase 8 — Tasting Notes ✅
-- Phase 9 — Dashboard & Collection Experience ✅
-- Phase 10 — Next
+* Phase 1 — Project Foundation ✅
+* Phase 2 — Django Models & Database ✅
+* Phase 3 — Core Django REST API ✅
+* Phase 4 — Authentication & Permissions ✅
+* Phase 5 — React Foundation ✅
+* Phase 6 — Wine Catalog ✅
+* Phase 7 — Personal Cellar ✅
+* Phase 8 — Tasting Notes ✅
+* Phase 9 — Dashboard & Collection Experience ✅
+* Phase 10 — Search, Filtering & Catalog UX ✅
+* Phase 11 — External Wine Data Integration — Next
+
+
+
+## Remaining Roadmap
+
+- Phase 11 — External Wine Data Integration
+- Phase 12 — Authentication Hardening
+- Phase 13 — UI/UX Polish & Responsive Design
+- Phase 14 — Testing, Error Handling & Quality
+- Phase 15 — Deployment & Production Readiness
+- Phase 16 — Portfolio & Interview Readiness
 
 ---
 
@@ -1285,6 +1297,196 @@ Verified:
 
 
 
+---
+
+## Phase 10 — Search, Filtering & Catalog UX
+
+Completed:
+
+* Expanded Browse Wines into a multi-filter catalog experience
+* Added search across wine name, varietal, winery, region, and country
+* Added Wine Type filtering
+* Added Varietal filtering
+* Added Region filtering
+* Added Country filtering
+* Added Vintage filtering
+* Added combined filter support
+* Added sorting by wine name
+* Added sorting by vintage
+* Added dynamic result counts
+* Added Clear Filters behavior
+* Added zero-result handling
+* Added filter-state persistence through URL query parameters
+* Added refresh-safe catalog filtering
+* Added shareable filtered catalog URLs
+* Preserved Wine Details navigation
+* Verified existing Cellar, Tasting Notes, Dashboard, and authentication flows
+* Verified ESLint passes
+* Verified Vite production build completes successfully
+
+### Phase 10 Browse Filters
+
+The Browse Wines page now supports:
+
+```text
+Search
+Wine Type
+Varietal
+Region
+Country
+Vintage
+Sort
+```
+
+Search checks:
+
+```text
+Wine Name
+Varietal
+Winery
+Region
+Country
+```
+
+### Phase 10 Sorting
+
+Supported sort options:
+
+```text
+Name A–Z
+Name Z–A
+Vintage Newest
+Vintage Oldest
+```
+
+### Phase 10 Filter Pipeline
+
+```text
+Wine Catalog
+     ↓
+Search
+     ↓
+Wine Type
+     ↓
+Varietal
+     ↓
+Region
+     ↓
+Country
+     ↓
+Vintage
+     ↓
+Sort
+     ↓
+Filtered WineGrid
+```
+
+All filters can be combined.
+
+### Phase 10 Dynamic Filter Options
+
+Varietal, Region, Country, and Vintage options are derived from the loaded wine catalog.
+
+This avoids hard-coding catalog-specific values and keeps the filter controls synchronized with available wine data.
+
+### Phase 10 Result Feedback
+
+The Browse page displays the filtered result count compared with the total catalog.
+
+Example:
+
+```text
+Showing 3 of 12 wines
+```
+
+When no matching wines exist, the reusable empty state is displayed.
+
+### Phase 10 Clear Filters
+
+Clear Filters resets:
+
+```text
+Search
+Wine Type
+Varietal
+Region
+Country
+Vintage
+Sort
+```
+
+The Clear Filters control only appears when a filter or non-default sort option is active.
+
+### Phase 10 URL Filter Persistence
+
+Catalog state is synchronized with URL query parameters.
+
+Example:
+
+```text
+/browse?type=red&country=France&vintage=2020
+```
+
+or:
+
+```text
+/browse?search=cabernet&sort=vintage-newest
+```
+
+This provides:
+
+```text
+Filter selection
+      ↓
+URL query parameters
+      ↓
+Refresh
+      ↓
+Filter state restored
+```
+
+Filtered catalog URLs can also be copied into a new browser tab and reproduce the same catalog state.
+
+Clearing all filters returns the URL to:
+
+```text
+/browse
+```
+
+### Phase 10 Validation
+
+Verified:
+
+* Browse Wines loads correctly
+* Search works across all supported text fields
+* Wine Type filtering works
+* Varietal filtering works
+* Region filtering works
+* Country filtering works
+* Vintage filtering works
+* Multiple filters work simultaneously
+* Name sorting works in both directions
+* Vintage sorting works in both directions
+* Result counts are accurate
+* Zero-result combinations show an empty state
+* Clear Filters resets all filter controls
+* Clear Filters restores the full wine catalog
+* Clear Filters restores the default sort order
+* Filter changes update the URL
+* Refresh preserves filter state
+* Shared filtered URLs restore the correct state
+* Changing filters updates existing query parameters
+* Clearing filters removes filter query parameters
+* Wine Details remains functional
+* Personal Cellar remains functional
+* Tasting Notes remains functional
+* Dashboard remains functional
+* Authentication and logout remain functional
+* ESLint passes with no errors
+* Vite production build completes successfully
+
+
+
 ## Next Phase
 
-Phase 10 — TBD
+Phase 11 — External Wine Data Integration
