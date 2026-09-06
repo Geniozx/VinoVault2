@@ -39,6 +39,23 @@ class Wine(models.Model):
     description = models.TextField(blank=True)
     image_url = models.URLField(blank=True)
 
+    body = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    acidity = models.CharField(
+        max_length=100,
+        blank=True,
+    )
+
+    alcohol_content = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+
     winery = models.ForeignKey(
         Winery,
         on_delete=models.SET_NULL,

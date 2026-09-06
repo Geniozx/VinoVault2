@@ -1487,6 +1487,31 @@ Verified:
 
 
 
-## Next Phase
+### Phase 11 — External Wine Data Integration ✅
 
-Phase 11 — External Wine Data Integration
+Integrated WineAPI.io as the first external wine data provider.
+
+Completed:
+- Added WineAPI.io provider service in Django
+- Added normalized external wine search results
+- Added external wine detail lookup
+- Added authenticated external wine import
+- Prevented duplicate imports using external source + external API ID
+- Optimized repeat imports to check the local database before calling WineAPI.io
+- Added stable imported fields:
+  - body
+  - acidity
+  - alcohol content
+- Preserved dynamic external fields for on-demand display:
+  - rating
+  - rating count
+  - price range
+  - food pairings
+- Added React external wine search page
+- Added external wine detail page
+- Added authenticated import flow
+- Added logged-out login prompt for import actions
+- Verified imported wines appear through the normal VinoVault catalog API
+- Updated Python dependencies
+- Backend checks passed
+- Frontend lint and production build passed

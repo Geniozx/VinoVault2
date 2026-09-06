@@ -20,6 +20,8 @@ import TastingNoteDetails from "./pages/TastingNoteDetails";
 import EditTastingNote from "./pages/EditTastingNote";
 import MyTastingNotes from "./pages/MyTastingNotes";
 import Dashboard from "./pages/Dashboard";
+import ExternalWineSearch from "./pages/ExternalWineSearch";
+import ExternalWineDetails from "./pages/ExternalWineDetails";
 
 
 function App() {
@@ -116,6 +118,16 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           }
+        />
+
+        <Route
+          path="/wines/find"
+          element={<ExternalWineSearch />}
+        />
+
+        <Route
+          path="/wines/find/:externalId"
+          element={<ExternalWineDetails />}
         />
 
         <Route path="*" element={<NotFound />} />
