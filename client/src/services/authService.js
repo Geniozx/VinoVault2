@@ -70,3 +70,19 @@ export async function logoutUser(accessToken, refreshToken) {
 
   return response.json();
 }
+
+
+export async function refreshAccessToken(refreshToken) {
+  const response = await apiRequest("/auth/token/refresh/", {
+    method: "POST",
+    body: JSON.stringify({
+      refresh: refreshToken,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Unable to refresh access token.");
+  }
+
+  return response.json();
+}

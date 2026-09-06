@@ -25,15 +25,10 @@ export async function getExternalWineDetails(externalId) {
 }
 
 export async function importExternalWine(externalId) {
-  const token = localStorage.getItem("accessToken");
-
   const response = await apiRequest(
     `/external-wines/${externalId}/import/`,
     {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     }
   );
 

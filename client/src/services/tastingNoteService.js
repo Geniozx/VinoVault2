@@ -1,17 +1,8 @@
 import { apiRequest } from "./api";
 
 
-function getAccessToken() {
-  return localStorage.getItem("accessToken");
-}
-
-
 export async function getTastingNotes() {
-  const response = await apiRequest("/tasting-notes/", {
-    headers: {
-      Authorization: `Bearer ${getAccessToken()}`,
-    },
-  });
+  const response = await apiRequest("/tasting-notes/");
 
   if (!response.ok) {
     throw new Error("Unable to load tasting notes.");
@@ -22,11 +13,7 @@ export async function getTastingNotes() {
 
 
 export async function getTastingNoteById(id) {
-  const response = await apiRequest(`/tasting-notes/${id}/`, {
-    headers: {
-      Authorization: `Bearer ${getAccessToken()}`,
-    },
-  });
+  const response = await apiRequest(`/tasting-notes/${id}/`);
 
   if (!response.ok) {
     throw new Error("Unable to load tasting note.");
@@ -39,9 +26,6 @@ export async function getTastingNoteById(id) {
 export async function createTastingNote(noteData) {
   const response = await apiRequest("/tasting-notes/", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${getAccessToken()}`,
-    },
     body: JSON.stringify(noteData),
   });
 
@@ -62,9 +46,6 @@ export async function createTastingNote(noteData) {
 export async function updateTastingNote(id, noteData) {
   const response = await apiRequest(`/tasting-notes/${id}/`, {
     method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${getAccessToken()}`,
-    },
     body: JSON.stringify(noteData),
   });
 
@@ -79,9 +60,6 @@ export async function updateTastingNote(id, noteData) {
 export async function deleteTastingNote(id) {
   const response = await apiRequest(`/tasting-notes/${id}/`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${getAccessToken()}`,
-    },
   });
 
   if (!response.ok) {

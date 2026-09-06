@@ -4,26 +4,49 @@ import {
   getCurrentUser,
   loginUser,
   logoutUser,
+  refreshAccessToken,
 } from "../services/authService";
 import { AuthContext } from "./authContext";
-
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const accessToken = localStorage.getItem("accessToken");
-  // const refreshToken = localStorage.getItem("refreshToken");
-
   useEffect(() => {
     async function restoreUser() {
-      if (!accessToken) {
+      const access = localStorage.getItem("accessToken");
+      const refresh = localStorage.getItem("refreshToken");
+
+      if (!access && !refresh) {
         setLoading(false);
         return;
       }
 
       try {
-        const currentUser = await getCurrentUser(accessToken);
+        if (access) {
+          try {
+            const currentUser = await getCurrentUser(access);
+            setUser(currentUser);
+            return;
+          } catch {
+            // Access token may be expired.
+            // Continue below and try the refresh token.
+          }
+        }
+
+        if (!refresh) {
+          throw new Error("No refresh token available.");
+        }
+
+        const tokens = await refreshAccessToken(refresh);
+
+        localStorage.setItem("accessToken", tokens.access);
+
+        if (tokens.refresh) {
+          localStorage.setItem("refreshToken", tokens.refresh);
+        }
+
+        const currentUser = await getCurrentUser(tokens.access);
         setUser(currentUser);
       } catch {
         localStorage.removeItem("accessToken");
@@ -35,7 +58,7 @@ export function AuthProvider({ children }) {
     }
 
     restoreUser();
-  }, [accessToken]);
+  }, []);
 
   async function login(credentials) {
     const tokens = await loginUser(credentials);
@@ -78,4 +101,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-

@@ -1,13 +1,7 @@
 import { apiRequest } from "./api";
 
 export async function getCellarEntries() {
-  const accessToken = localStorage.getItem("accessToken");
-
-  const response = await apiRequest("/cellar/", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const response = await apiRequest("/cellar/");
 
   if (!response.ok) {
     throw new Error("Unable to load your cellar.");
@@ -19,13 +13,7 @@ export async function getCellarEntries() {
 
 
 export async function getCellarEntryById(id) {
-  const accessToken = localStorage.getItem("accessToken");
-
-  const response = await apiRequest(`/cellar/${id}/`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const response = await apiRequest(`/cellar/${id}/`);
 
   if (!response.ok) {
     throw new Error("Unable to load cellar entry.");
@@ -37,13 +25,8 @@ export async function getCellarEntryById(id) {
 
 
 export async function updateCellarEntry(id, entryData) {
-  const accessToken = localStorage.getItem("accessToken");
-
   const response = await apiRequest(`/cellar/${id}/`, {
     method: "PATCH",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     body: JSON.stringify(entryData),
   });
 
@@ -57,13 +40,8 @@ export async function updateCellarEntry(id, entryData) {
 
 
 export async function deleteCellarEntry(id) {
-  const accessToken = localStorage.getItem("accessToken");
-
   const response = await apiRequest(`/cellar/${id}/`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
   });
 
   if (!response.ok) {
@@ -74,13 +52,8 @@ export async function deleteCellarEntry(id) {
 
 
 export async function createCellarEntry(entryData) {
-  const accessToken = localStorage.getItem("accessToken");
-
   const response = await apiRequest("/cellar/", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     body: JSON.stringify(entryData),
   });
 

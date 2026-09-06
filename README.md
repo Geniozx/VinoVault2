@@ -50,14 +50,13 @@ vinovault2/
 * Phase 8 — Tasting Notes ✅
 * Phase 9 — Dashboard & Collection Experience ✅
 * Phase 10 — Search, Filtering & Catalog UX ✅
-* Phase 11 — External Wine Data Integration — Next
+* Phase 11 — External Wine Data Integration ✅
+* Phase 12 — Authentication Hardening ✅
 
 
 
 ## Remaining Roadmap
 
-- Phase 11 — External Wine Data Integration
-- Phase 12 — Authentication Hardening
 - Phase 13 — UI/UX Polish & Responsive Design
 - Phase 14 — Testing, Error Handling & Quality
 - Phase 15 — Deployment & Production Readiness
@@ -1513,5 +1512,31 @@ Completed:
 - Added logged-out login prompt for import actions
 - Verified imported wines appear through the normal VinoVault catalog API
 - Updated Python dependencies
+- Backend checks passed
+- Frontend lint and production build passed
+
+
+
+
+### Phase 12 — Authentication Hardening ✅
+
+Improved JWT session handling and protected API reliability.
+
+Completed:
+- Added refresh-token support to the React auth service
+- Restored authenticated sessions using refresh tokens when access tokens are missing or expired
+- Added automatic 401 handling in the shared API client
+- Automatically refreshes access tokens and retries the original protected request
+- Centralized Bearer token handling in `api.js`
+- Removed duplicate Authorization header logic from cellar, tasting note, and external wine services
+- Added refresh-token rotation support
+- Enabled Simple JWT refresh-token blacklisting
+- Verified repeated token rotation works across protected requests
+- Verified invalid refresh tokens clear the session and return the user to login
+- Added explicit JWT lifetimes:
+  - Access token: 15 minutes
+  - Refresh token: 7 days
+- Moved Django `SECRET_KEY` into environment configuration
+- Confirmed protected cellar, tasting note, and external wine workflows survive access-token expiration
 - Backend checks passed
 - Frontend lint and production build passed
