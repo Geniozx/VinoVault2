@@ -77,68 +77,136 @@ function EditTastingNote() {
 
 
   return (
-    <main>
-      <Link to={`/tasting-notes/${id}`}>
+    <main className="edit-tasting-note-page">
+      <Link
+        className="edit-tasting-note-back-link"
+        to={`/tasting-notes/${id}`}
+      >
         Back to Tasting Note
       </Link>
 
-      <h2>Edit Tasting Note</h2>
+      <section className="edit-tasting-note-header">
+        <div>
+          <p className="edit-tasting-note-eyebrow">
+            Tasting Journal
+          </p>
 
-      <h3>{note.wine.name}</h3>
+          <h1>Edit Tasting Note</h1>
+
+          {note?.wine && (
+            <div className="edit-tasting-note-wine-summary">
+              <h2>{note.wine.name}</h2>
+
+              <div>
+                {note.wine.vintage && (
+                  <p>{note.wine.vintage}</p>
+                )}
+
+                {note.wine.winery && (
+                  <p>{note.wine.winery.name}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          <p className="edit-tasting-note-description">
+            Update your rating, tasting date, or notes for this wine.
+          </p>
+        </div>
+      </section>
 
       {error && (
         <ErrorMessage message={error} />
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="rating">
-            Rating
-          </label>
+      <form
+        className="edit-tasting-note-form"
+        onSubmit={handleSubmit}
+      >
+        <div className="edit-tasting-note-form-layout">
+          <section className="edit-tasting-note-form-section">
+            <div className="edit-tasting-note-section-heading">
+              <p>Your Experience</p>
+              <h2>Tasting Details</h2>
+            </div>
 
-          <input
-            id="rating"
-            type="number"
-            min="1"
-            max="5"
-            value={rating}
-            onChange={(event) => setRating(event.target.value)}
-            required
-          />
+            <div className="edit-tasting-note-form-grid">
+              <div className="edit-tasting-note-field edit-tasting-note-rating-field">
+                <label htmlFor="rating">
+                  Rating
+                </label>
+
+                <input
+                  id="rating"
+                  type="number"
+                  min="1"
+                  max="5"
+                  value={rating}
+                  onChange={(event) => setRating(event.target.value)}
+                  required
+                />
+
+                <p className="edit-tasting-note-helper">
+                  Rate this wine from 1 to 5.
+                </p>
+              </div>
+
+              <div className="edit-tasting-note-field edit-tasting-note-date-field">
+                <label htmlFor="tastedOn">
+                  Tasting Date <span>(Optional)</span>
+                </label>
+
+                <input
+                  id="tastedOn"
+                  type="date"
+                  value={tastedOn}
+                  onChange={(event) => setTastedOn(event.target.value)}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="edit-tasting-note-form-section">
+            <div className="edit-tasting-note-section-heading">
+              <p>Your Impressions</p>
+              <h2>Tasting Notes</h2>
+            </div>
+
+            <div className="edit-tasting-note-field">
+              <label htmlFor="notes">
+                Notes
+              </label>
+
+              <textarea
+                id="notes"
+                rows="7"
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+                required
+              />
+
+              <p className="edit-tasting-note-helper">
+                Describe what stood out, such as aroma, flavor,
+                finish, or overall impression.
+              </p>
+            </div>
+          </section>
         </div>
 
-        <div>
-          <label htmlFor="tastedOn">
-            Tasting Date
-          </label>
+        <div className="edit-tasting-note-actions">
+          <button
+            type="submit"
+            disabled={submitting}
+          >
+            {submitting
+              ? "Saving..."
+              : "Save Changes"}
+          </button>
 
-          <input
-            id="tastedOn"
-            type="date"
-            value={tastedOn}
-            onChange={(event) => setTastedOn(event.target.value)}
-          />
+          <Link to={`/tasting-notes/${id}`}>
+            Cancel
+          </Link>
         </div>
-
-        <div>
-          <label htmlFor="notes">
-            Tasting Notes
-          </label>
-
-          <textarea
-            id="notes"
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting ? "Saving..." : "Save Changes"}
-        </button>
       </form>
     </main>
   );

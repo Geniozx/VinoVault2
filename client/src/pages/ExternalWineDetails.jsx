@@ -71,104 +71,182 @@ function ExternalWineDetails() {
     }
 
     return (
-        <main>
-            <Link to="/wines/find">
+        <main className="external-wine-details-page">
+            <Link
+            className="external-wine-details-back-link"
+            to="/wines/find"
+            >
                 ← Back to Wine Search
             </Link>
 
-            <h1>{wine.name}</h1>
+            <section className="external-wine-details-hero">
+                <div className="external-wine-details-hero-content">
+                    <p className="external-wine-details-eyebrow">
+                        External Wine Discovery
+                    </p>
 
-            {wine.vintage && (
-                <p>Vintage: {wine.vintage}</p>
-            )}
+                    <h1>{wine.name}</h1>
 
-            {wine.winery && (
-                <p>Winery: {wine.winery}</p>
-            )}
+                    <div className="external-wine-details-identity">
+                        {wine.vintage && <span>{wine.vintage}</span>}
 
-            {wine.region && (
-                <p>
-                    Region: {wine.region}
-                    {wine.country ? `, ${wine.country}` : ""}
-                </p>
-            )}
+                        {wine.winery && <span>{wine.winery}</span>}
 
-            {wine.wine_type && (
-                <p>Type: {wine.wine_type}</p>
-            )}
+                        {wine.region && (
+                            <span>
+                            {wine.region}
+                            {wine.country ? `, ${wine.country}` : ""}
+                            </span>
+                        )}
+                    </div>
 
-            {wine.varietal && (
-                <p>Varietal: {wine.varietal}</p>
-            )}
-
-            {wine.body && (
-                <p>Body: {wine.body}</p>
-            )}
-
-            {wine.acidity && (
-                <p>Acidity: {wine.acidity}</p>
-            )}
-
-            {wine.alcohol_content && (
-                <p>Alcohol: {wine.alcohol_content}%</p>
-            )}
-
-            {wine.description && (
-                <p>{wine.description}</p>
-            )}
-
-            {wine.external_rating && (
-                <p>
-                    Rating: {wine.external_rating} (
-                    {wine.external_rating_count} ratings)
-                </p>
-            )}
-
-            {wine.price_range && (
-                <p>Price Range: {wine.price_range}</p>
-            )}
-
-            {wine.pairings?.length > 0 && (
-                <div>
-                    <h2>Food Pairings</h2>
-
-                    <ul>
-                        {wine.pairings.map((pairing) => (
-                            <li key={pairing}>{pairing}</li>
-                        ))}
-                    </ul>
+                    {wine.description && (
+                        <p className="external-wine-details-description">
+                            {wine.description}
+                        </p>
+                    )}
                 </div>
-            )}
+            </section>
 
-            {importError && (
-                <ErrorMessage message={importError} />
-            )}
+            <div className="external-wine-details-content-grid">
+                <section className="external-wine-details-profile">
+                    <div className="external-wine-details-section-heading">
+                        <p>At a Glance</p>
+                        <h2>Wine Details</h2>
+                    </div>
 
-            {importedWine ? (
-                <div>
-                    <p>Wine added to VinoVault.</p>
+                    <div className="external-wine-details-profile-grid">
+                        {wine.wine_type && (
+                            <div>
+                                <span>Type</span>
+                                <p>{wine.wine_type}</p>
+                            </div>
+                        )}
 
-                    <Link to={`/wines/${importedWine.id}`}>
+                        {wine.varietal && (
+                            <div>
+                                <span>Varietal</span>
+                                <p>{wine.varietal}</p>
+                            </div>
+                        )}
+
+                        {wine.body && (
+                            <div>
+                                <span>Body</span>
+                                <p>{wine.body}</p>
+                            </div>
+                        )}
+
+                        {wine.acidity && (
+                            <div>
+                                <span>Acidity</span>
+                                <p>{wine.acidity}</p>
+                            </div>
+                        )}
+
+                        {wine.alcohol_content && (
+                            <div>
+                                <span>Alcohol</span>
+                                <p>{wine.alcohol_content}%</p>
+                            </div>
+                        )}
+                    </div>
+                </section>
+
+                <section className="external-wine-details-market">
+                    <div className="external-wine-details-section-heading">
+                        <p>Wine Database</p>
+                        <h2>External Insights</h2>
+                    </div>
+
+                    <div className="external-wine-details-market-grid">
+                        {wine.external_rating != null && (
+                            <div className="external-wine-details-rating">
+                                <span>Rating</span>
+
+                                <p>
+                                    <strong>{wine.external_rating}</strong>
+
+                                    {wine.external_rating_count != null && (
+                                    <> ({wine.external_rating_count} ratings)</>
+                                    )}
+                                </p>
+                            </div>
+                        )}
+
+                        {wine.price_range && (
+                            <div>
+                                <span>Price Range</span>
+                                <p>{wine.price_range}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {wine.pairings?.length > 0 && (
+                    <div className="external-wine-details-pairings">
+                        <span>Food Pairings</span>
+
+                        <div className="external-wine-details-pairing-list">
+                            {wine.pairings.map((pairing) => (
+                                <span key={pairing}>{pairing}</span>
+                            ))}
+                        </div>
+                    </div>
+                    )}
+                </section>
+                </div>
+
+                <section className="external-wine-details-import">
+                <div className="external-wine-details-import-content">
+                    <p className="external-wine-details-import-eyebrow">
+                    Add to VinoVault
+                    </p>
+
+                    <h2>Bring This Wine Into Your Collection</h2>
+
+                    <p>
+                    Add this wine to the VinoVault catalog so you can track it
+                    in your cellar and record your tasting experiences.
+                    </p>
+                </div>
+
+                <div className="external-wine-details-import-action">
+                    {importError && (
+                    <ErrorMessage message={importError} />
+                    )}
+
+                    {importedWine ? (
+                    <div className="external-wine-details-import-success">
+                        <p>Wine added to VinoVault.</p>
+
+                        <Link to={`/wines/${importedWine.id}`}>
                         View in VinoVault
-                    </Link>
-                </div>
-                ) : isAuthenticated ? (
+                        </Link>
+                    </div>
+                    ) : isAuthenticated ? (
                     <button
                         type="button"
                         onClick={handleImport}
                         disabled={importing}
                     >
-                        {importing ? "Importing..." : "Import to VinoVault"}
+                        {importing
+                        ? "Importing..."
+                        : "Import to VinoVault"}
                     </button>
-                ) : (
-                    <p>
+                    ) : (
+                    <div className="external-wine-details-login">
+                        <p>
+                        Sign in to add this wine to your VinoVault
+                        collection.
+                        </p>
+
                         <Link to="/login">
-                            Log in
-                        </Link>{" "}
-                        to import this wine to VinoVault.
-                    </p>
-                )
-            }
+                        Sign In
+                        </Link>
+                    </div>
+                    )}
+                </div>
+            </section>
         </main>
     );
 }

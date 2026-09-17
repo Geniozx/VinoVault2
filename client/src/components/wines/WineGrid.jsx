@@ -1,16 +1,15 @@
 import WineCard from "./WineCard";
 
-
 function WineGrid({ wines }) {
   return (
-    <section>
+    <div className="wine-grid">
       {wines.map((wine) => (
         <WineCard
           key={wine.id}
           wine={wine}
         />
       ))}
-    </section>
+    </div>
   );
 }
 

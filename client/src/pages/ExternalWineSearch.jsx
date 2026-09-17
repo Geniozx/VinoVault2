@@ -41,85 +41,164 @@ function ExternalWineSearch() {
     }
 
     return (
-        <main>
-            <h1>Find a Wine</h1>
-
-            <p>
-                Search for wines outside your current VinoVault catalog.
-            </p>
-
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="external-wine-search">
-                    Wine Name
-                </label>
-
-                <input
-                    id="external-wine-search"
-                    type="search"
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Try Opus One"
-                />
-
-                <button type="submit" disabled={loading}>
-                    {loading ? "Searching..." : "Search"}
-                </button>
-            </form>
-
-            {loading && <Loading />}
-
-            {error && <ErrorMessage message={error} />}
-
-            {!loading &&
-                !error &&
-                hasSearched &&
-                wines.length === 0 && (
-                    <EmptyState message="No wines found." />
-                )
-            }
-
-            {!loading && !error && wines.length > 0 && (
-                <div>
-                    <p>
-                        {wines.length} result{wines.length === 1 ? "" : "s"}
+        <main className="external-search-page">
+            <section className="external-search-hero">
+                <div className="external-search-hero-content">
+                    <p className="external-search-eyebrow">
+                        Discover Beyond VinoVault
                     </p>
 
+                    <h1>Find a Wine</h1>
+
+                    <p className="external-search-description">
+                        Search beyond the VinoVault catalog to discover new wines
+                        and bring them into your collection.
+                    </p>
+                </div>
+            </section>
+
+            <section className="external-search-panel">
+                <div className="external-search-panel-heading">
+                    <p>Wine Database</p>
+                    <h2>Search for a Wine</h2>
+                </div>
+
+                <form
+                    className="external-search-form"
+                    onSubmit={handleSubmit}
+                >
+                    <div className="external-search-field">
+                        <label htmlFor="external-wine-search">
+                            Wine Name
+                        </label>
+
+                        <div className="external-search-controls">
+                            <input
+                            id="external-wine-search"
+                            type="search"
+                            value={query}
+                            onChange={(event) => setQuery(event.target.value)}
+                            placeholder="Try Opus One"
+                            />
+
+                            <button
+                            type="submit"
+                            disabled={loading}
+                            >
+                            {loading ? "Searching..." : "Search"}
+                            </button>
+                        </div>
+
+                        <p className="external-search-helper">
+                            Search by wine name to explore wines outside the
+                            current VinoVault catalog.
+                        </p>
+                    </div>
+                </form>
+            </section>
+
+            {loading && (
+            <Loading message="Searching wines..." />
+            )}
+
+            {error && (
+            <ErrorMessage message={error} />
+            )}
+
+            {!loading &&
+            !error &&
+            hasSearched &&
+            wines.length === 0 && (
+                <EmptyState message="No wines found." />
+            )}
+
+            {!loading && !error && wines.length > 0 && (
+            <section className="external-search-results">
+                <div className="external-search-results-heading">
+                    <div>
+                        <p className="external-search-results-eyebrow">
+                            Search Results
+                        </p>
+
+                        <h2>
+                            {wines.length}{" "}
+                            {wines.length === 1 ? "Wine" : "Wines"} Found
+                        </h2>
+                    </div>
+                </div>
+
+                <div className="external-search-grid">
                     {wines.map((wine) => (
-                        <article key={wine.external_api_id}>
-                            <h2>{wine.name}</h2>
+                        <article
+                        className="external-search-card"
+                        key={wine.external_api_id}
+                        >
+                            <div className="external-search-card-heading">
+                                <h3>{wine.name}</h3>
 
-                            {wine.vintage && (
-                                <p>Vintage: {wine.vintage}</p>
-                            )}
+                                <div className="external-search-card-meta">
+                                {wine.vintage && (
+                                    <p>{wine.vintage}</p>
+                                )}
 
-                            {wine.winery && (
-                                <p>Winery: {wine.winery}</p>
-                            )}
+                                {wine.winery && (
+                                    <p>{wine.winery}</p>
+                                )}
+                                </div>
+                            </div>
 
-                            {wine.region && (
-                                <p>
-                                    Region: {wine.region}
-                                    {wine.country ? `, ${wine.country}` : ""}
-                                </p>
-                            )}
+                            <div className="external-search-card-details">
+                                {wine.region && (
+                                <div>
+                                    <span>Region</span>
 
-                            {wine.wine_type && (
-                                <p>Type: {wine.wine_type}</p>
-                            )}
+                                    <p>
+                                    {wine.region}
+                                    {wine.country
+                                        ? `, ${wine.country}`
+                                        : ""}
+                                    </p>
+                                </div>
+                                )}
 
-                            {wine.external_rating && (
-                                <p>
-                                    Rating: {wine.external_rating} (
-                                    {wine.external_rating_count} ratings)
-                                </p>
-                            )}
+                                {wine.wine_type && (
+                                <div>
+                                    <span>Type</span>
+                                    <p>{wine.wine_type}</p>
+                                </div>
+                                )}
 
-                            <Link to={`/wines/find/${wine.external_api_id}`}>
-                                View Details
-                            </Link>
+                                {wine.external_rating && (
+                                <div className="external-search-card-rating">
+                                    <span>Rating</span>
+
+                                    <p>
+                                    <strong>
+                                        {wine.external_rating}
+                                    </strong>
+
+                                    {wine.external_rating_count != null && (
+                                        <>
+                                        {" "}
+                                        ({wine.external_rating_count} ratings)
+                                        </>
+                                    )}
+                                    </p>
+                                </div>
+                                )}
+                            </div>
+
+                            <div className="external-search-card-actions">
+                                <Link
+                                to={`/wines/find/${wine.external_api_id}`}
+                                >
+                                    View Wine
+                                </Link>
+                            </div>
                         </article>
                     ))}
                 </div>
+            </section>
             )}
         </main>
     );

@@ -1,15 +1,25 @@
-import { useEffect, useState, useMemo } from "react";
+import {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useSearchParams } from "react-router-dom";
+
+import { AuthContext } from "../context/authContext";
 
 import WineGrid from "../components/wines/WineGrid";
 import EmptyState from "../components/ui/EmptyState";
 import ErrorMessage from "../components/ui/ErrorMessage";
 import Loading from "../components/ui/Loading";
+import ExternalWineSearchSection from "../components/wines/ExternalWineSearchSection";
 
 import { getWines } from "../services/wineService";
 
 
 function BrowseWines() {
+  const { isAuthenticated } = useContext(AuthContext);
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [wines, setWines] = useState([]);
@@ -210,150 +220,42 @@ function BrowseWines() {
 
 
   return (
-    <main>
-      <h2>Browse Wines</h2>
-
-      <div>
-        <label htmlFor="wine-search">
-          Search Wines
-        </label>
-
-        <input
-          id="wine-search"
-          type="text"
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search by wine, varietal, winery, region..."
-        />
-      </div>
-
-      <div>
-        <label htmlFor="wine-type">
-          Wine Type
-        </label>
-
-        <select
-          id="wine-type"
-          value={wineType}
-          onChange={(event) => setWineType(event.target.value)}
-        >
-          <option value="">All Types</option>
-          <option value="red">Red</option>
-          <option value="white">White</option>
-          <option value="rose">Rosé</option>
-          <option value="sparkling">Sparkling</option>
-          <option value="dessert">Dessert</option>
-          <option value="fortified">Fortified</option>
-        </select>
-      </div>
-
-
-      <div>
-        <label htmlFor="wine-sort">
-          Sort By
-        </label>
-
-        <select
-          id="wine-sort"
-          value={sortBy}
-          onChange={(event) => setSortBy(event.target.value)}
-        >
-          <option value="name-asc">Name A–Z</option>
-          <option value="name-desc">Name Z–A</option>
-          <option value="vintage-newest">Vintage Newest</option>
-          <option value="vintage-oldest">Vintage Oldest</option>
-        </select>
-      </div>
-
-
-      <div>
-        <label htmlFor="varietal">
-          Varietal
-        </label>
-
-        <select
-          id="varietal"
-          value={varietal}
-          onChange={(event) => setVarietal(event.target.value)}
-        >
-          <option value="">All Varietals</option>
-
-          {varietals.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="region">
-          Region
-        </label>
-
-        <select
-          id="region"
-          value={region}
-          onChange={(event) => setRegion(event.target.value)}
-        >
-          <option value="">All Regions</option>
-
-          {regions.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="country">
-          Country
-        </label>
-
-        <select
-          id="country"
-          value={country}
-          onChange={(event) => setCountry(event.target.value)}
-        >
-          <option value="">All Countries</option>
-
-          {countries.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </div>
-
-
-      <div>
-        <label htmlFor="vintage">
-          Vintage
-        </label>
-
-        <select
-          id="vintage"
-          value={vintage}
-          onChange={(event) => setVintage(event.target.value)}
-        >
-          <option value="">All Vintages</option>
-
-          {vintages.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </div>
-
-
-      {!loading && !error && (
-        <div>
-          <p>
-            Showing {filteredWines.length} of {wines.length} wine
-            {wines.length === 1 ? "" : "s"}
+    <main className="browse-wines-page">
+      <section className="browse-wines-header">
+        <div className="browse-wines-header-content">
+          <p className="browse-wines-eyebrow">
+            Wine Catalog
           </p>
+
+          <h1>Browse Wines</h1>
+
+          <p className="browse-wines-description">
+            Explore the catalog, discover new bottles, and find wines
+            worth adding to your collection.
+          </p>
+        </div>
+      </section>
+
+      <section className="browse-wines-controls">
+        <div className="browse-wines-search">
+          <label htmlFor="wine-search">
+            Search Wines
+          </label>
+
+          <input
+            id="wine-search"
+            type="text"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search by wine, varietal, winery, region..."
+          />
+        </div>
+
+        <div className="browse-wines-filter-heading">
+          <div>
+            <p>Refine Your Search</p>
+            <h2>Filters</h2>
+          </div>
 
           {hasActiveFilters && (
             <button
@@ -364,20 +266,173 @@ function BrowseWines() {
             </button>
           )}
         </div>
+
+        <div className="browse-wines-filter-grid">
+          <div className="browse-wines-field">
+            <label htmlFor="wine-type">
+              Wine Type
+            </label>
+
+            <select
+              id="wine-type"
+              value={wineType}
+              onChange={(event) => setWineType(event.target.value)}
+            >
+              <option value="">All Types</option>
+              <option value="red">Red</option>
+              <option value="white">White</option>
+              <option value="rose">Rosé</option>
+              <option value="sparkling">Sparkling</option>
+              <option value="dessert">Dessert</option>
+              <option value="fortified">Fortified</option>
+            </select>
+          </div>
+
+          <div className="browse-wines-field">
+            <label htmlFor="varietal">
+              Varietal
+            </label>
+
+            <select
+              id="varietal"
+              value={varietal}
+              onChange={(event) => setVarietal(event.target.value)}
+            >
+              <option value="">All Varietals</option>
+
+              {varietals.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="browse-wines-field">
+            <label htmlFor="region">
+              Region
+            </label>
+
+            <select
+              id="region"
+              value={region}
+              onChange={(event) => setRegion(event.target.value)}
+            >
+              <option value="">All Regions</option>
+
+              {regions.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="browse-wines-field">
+            <label htmlFor="country">
+              Country
+            </label>
+
+            <select
+              id="country"
+              value={country}
+              onChange={(event) => setCountry(event.target.value)}
+            >
+              <option value="">All Countries</option>
+
+              {countries.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="browse-wines-field">
+            <label htmlFor="vintage">
+              Vintage
+            </label>
+
+            <select
+              id="vintage"
+              value={vintage}
+              onChange={(event) => setVintage(event.target.value)}
+            >
+              <option value="">All Vintages</option>
+
+              {vintages.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="browse-wines-field">
+            <label htmlFor="wine-sort">
+              Sort By
+            </label>
+
+            <select
+              id="wine-sort"
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value)}
+            >
+              <option value="name-asc">Name A–Z</option>
+              <option value="name-desc">Name Z–A</option>
+              <option value="vintage-newest">
+                Vintage Newest
+              </option>
+              <option value="vintage-oldest">
+                Vintage Oldest
+              </option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      {!loading && !error && (
+        <section className="browse-wines-results">
+          <div className="browse-wines-results-heading">
+            <div>
+              <p className="browse-wines-results-eyebrow">
+                Catalog
+              </p>
+
+              <h2>
+                {filteredWines.length}{" "}
+                {filteredWines.length === 1
+                  ? "Wine"
+                  : "Wines"}
+              </h2>
+            </div>
+
+            <p className="browse-wines-results-count">
+              Showing {filteredWines.length} of {wines.length}
+            </p>
+          </div>
+
+          {filteredWines.length === 0 ? (
+            <EmptyState message="No wines match your search." />
+          ) : (
+            <WineGrid wines={filteredWines} />
+          )}
+        </section>
       )}
 
-      {loading && <Loading message="Loading wines..." />}
-
-      {error && <ErrorMessage message={error} />}
-
-      {!loading && !error && filteredWines.length === 0 && (
-        <EmptyState message="No wines match your search." />
+      {loading && (
+        <Loading message="Loading wines..." />
       )}
 
-      {!loading && !error && filteredWines.length > 0 && (
-        <WineGrid wines={filteredWines} />
+      {error && (
+        <ErrorMessage message={error} />
       )}
 
+      {isAuthenticated && (
+        <section className="browse-wines-external">
+          <ExternalWineSearchSection />
+        </section>
+      )}
     </main>
   );
 }

@@ -27,113 +27,117 @@ import ExternalWineDetails from "./pages/ExternalWineDetails";
 function App() {
   return (
     <>
+    <div className="app-layout">
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/browse" element={<BrowseWines />} />
-        <Route path="/wines/:id" element={<WineDetails />} />
+      <div className="app-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/browse" element={<BrowseWines />} />
+          <Route path="/wines/:id" element={<WineDetails />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        <Route
-          path="/cellar"
-          element={
-            <ProtectedRoute>
-              <MyCellar />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/cellar"
+            element={
+              <ProtectedRoute>
+                <MyCellar />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/cellar/add"
-          element={
-            <ProtectedRoute>
-              <AddCellarEntry />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/cellar/add"
+            element={
+              <ProtectedRoute>
+                <AddCellarEntry />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/cellar/:id"
-          element={
-            <ProtectedRoute>
-              <CellarEntryDetails />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/cellar/:id"
+            element={
+              <ProtectedRoute>
+                <CellarEntryDetails />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/cellar/:id/edit"
-          element={
-            <ProtectedRoute>
-              <EditCellarEntry />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/cellar/:id/edit"
+            element={
+              <ProtectedRoute>
+                <EditCellarEntry />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/tasting-notes/add"
-          element={
-            <ProtectedRoute>
-              <AddTastingNote />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/tasting-notes/add"
+            element={
+              <ProtectedRoute>
+                <AddTastingNote />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/tasting-notes/:id"
-          element={
-            <ProtectedRoute>
-              <TastingNoteDetails />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/tasting-notes/:id"
+            element={
+              <ProtectedRoute>
+                <TastingNoteDetails />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/tasting-notes/:id/edit"
-          element={
-            <ProtectedRoute>
-              <EditTastingNote />
-            </ProtectedRoute>
-          }
-        />
-
-
-        <Route
-          path="/tasting-notes"
-          element={
-            <ProtectedRoute>
-              <MyTastingNotes />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/tasting-notes/:id/edit"
+            element={
+              <ProtectedRoute>
+                <EditTastingNote />
+              </ProtectedRoute>
+            }
+          />
 
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/tasting-notes"
+            element={
+              <ProtectedRoute>
+                <MyTastingNotes />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/wines/find"
-          element={<ExternalWineSearch />}
-        />
 
-        <Route
-          path="/wines/find/:externalId"
-          element={<ExternalWineDetails />}
-        />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route
+            path="/wines/find"
+            element={<ExternalWineSearch />}
+          />
+
+          <Route
+            path="/wines/find/:externalId"
+            element={<ExternalWineDetails />}
+          />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
 
       <Footer />
+    </div>
     </>
   );
 }

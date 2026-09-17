@@ -12,6 +12,7 @@ function EditCellarEntry() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [wine, setWine] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [purchaseDate, setPurchaseDate] = useState("");
   const [purchasePrice, setPurchasePrice] = useState("");
@@ -27,6 +28,7 @@ function EditCellarEntry() {
       try {
         const entry = await getCellarEntryById(id);
 
+        setWine(entry.wine);
         setQuantity(entry.quantity);
         setPurchaseDate(entry.purchase_date || "");
         setPurchasePrice(entry.purchase_price || "");
@@ -73,74 +75,152 @@ function EditCellarEntry() {
     );
   }
 
+
+
   return (
-    <main>
-      <h2>Edit Cellar Entry</h2>
-
-      {error && <ErrorMessage message={error} />}
-
-      <form onSubmit={handleSubmit}>
+    <main className="edit-cellar-page">
+      <section className="edit-cellar-header">
         <div>
-          <label htmlFor="quantity">Quantity</label>
-          <input
-            id="quantity"
-            type="number"
-            min="1"
-            value={quantity}
-            onChange={(event) => setQuantity(event.target.value)}
-            required
-          />
-        </div>
+          <p className="edit-cellar-eyebrow">
+            Cellar Management
+          </p>
 
-        <div>
-          <label htmlFor="purchase-date">Purchase Date</label>
-          <input
-            id="purchase-date"
-            type="date"
-            value={purchaseDate}
-            onChange={(event) => setPurchaseDate(event.target.value)}
-          />
-        </div>
+          <h1>Edit Cellar Entry</h1>
 
-        <div>
-          <label htmlFor="purchase-price">Purchase Price</label>
-          <input
-            id="purchase-price"
-            type="number"
-            min="0"
-            step="0.01"
-            value={purchasePrice}
-            onChange={(event) => setPurchasePrice(event.target.value)}
-          />
-        </div>
+          {wine && (
+            <div className="edit-cellar-wine-summary">
+              <h2>{wine.name}</h2>
 
-        <div>
-          <label htmlFor="storage-location">Storage Location</label>
-          <input
-            id="storage-location"
-            type="text"
-            value={storageLocation}
-            onChange={(event) => setStorageLocation(event.target.value)}
-          />
-        </div>
+              <div>
+                {wine.vintage && (
+                  <p>{wine.vintage}</p>
+                )}
 
-        <div>
-          <label htmlFor="personal-notes">Personal Notes</label>
-          <textarea
-            id="personal-notes"
-            value={personalNotes}
-            onChange={(event) => setPersonalNotes(event.target.value)}
-          />
-        </div>
+                {wine.winery && (
+                  <p>{wine.winery.name}</p>
+                )}
+              </div>
+            </div>
+          )}
 
-        <button type="submit" disabled={submitting}>
-          {submitting ? "Saving..." : "Save Changes"}
-        </button>
+          <p className="edit-cellar-description">
+            Update the quantity, purchase information, storage
+            location, or personal notes for this cellar entry.
+          </p>
+        </div>
+      </section>
+
+      {error && (
+        <ErrorMessage message={error} />
+      )}
+
+      <form
+        className="edit-cellar-form"
+        onSubmit={handleSubmit}
+      >
+        <section className="edit-cellar-form-section">
+          <div className="edit-cellar-section-heading">
+            <p>Collection Details</p>
+            <h2>Inventory Information</h2>
+          </div>
+
+          <div className="edit-cellar-form-grid">
+            <div className="edit-cellar-field">
+              <label htmlFor="quantity">
+                Quantity
+              </label>
+
+              <input
+                id="quantity"
+                type="number"
+                min="1"
+                value={quantity}
+                onChange={(event) => setQuantity(event.target.value)}
+                required
+              />
+            </div>
+
+            <div className="edit-cellar-field">
+              <label htmlFor="purchase-date">
+                Purchase Date <span>(Optional)</span>
+              </label>
+
+              <input
+                id="purchase-date"
+                type="date"
+                value={purchaseDate}
+                onChange={(event) => setPurchaseDate(event.target.value)}
+              />
+            </div>
+
+            <div className="edit-cellar-field">
+              <label htmlFor="purchase-price">
+                Purchase Price <span>(Optional)</span>
+              </label>
+
+              <input
+                id="purchase-price"
+                type="number"
+                inputMode="decimal"
+                min="0"
+                step="0.01"
+                value={purchasePrice}
+                onChange={(event) => setPurchasePrice(event.target.value)}
+              />
+            </div>
+
+            <div className="edit-cellar-field">
+              <label htmlFor="storage-location">
+                Storage Location <span>(Optional)</span>
+              </label>
+
+              <input
+                id="storage-location"
+                type="text"
+                value={storageLocation}
+                onChange={(event) => setStorageLocation(event.target.value)}
+              />
+
+              <p className="edit-cellar-helper">
+                Example: Wine fridge, rack 2, kitchen cabinet.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="edit-cellar-form-section">
+          <div className="edit-cellar-section-heading">
+            <p>Personal Details</p>
+            <h2>Notes</h2>
+          </div>
+
+          <div className="edit-cellar-field">
+            <label htmlFor="personal-notes">
+              Personal Notes <span>(Optional)</span>
+            </label>
+
+            <textarea
+              id="personal-notes"
+              rows="6"
+              value={personalNotes}
+              onChange={(event) => setPersonalNotes(event.target.value)}
+            />
+          </div>
+        </section>
+
+        <div className="edit-cellar-actions">
+          <button
+            type="submit"
+            disabled={submitting}
+          >
+            {submitting ? "Saving..." : "Save Changes"}
+          </button>
+
+          <Link to={`/cellar/${id}`}>
+            Cancel
+          </Link>
+        </div>
       </form>
-
-      <Link to={`/cellar/${id}`}>
-        Cancel
-      </Link>
     </main>
   );
 }

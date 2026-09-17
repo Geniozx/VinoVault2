@@ -62,7 +62,7 @@ function Dashboard() {
 
 
     const wineTypeCounts = cellarEntries.reduce((counts, entry) => {
-    const type = entry.wine.type || "unknown";
+    const type = entry.wine.wine_type || "unknown";
 
         counts[type] = (counts[type] || 0) + 1;
 
@@ -80,108 +80,222 @@ function Dashboard() {
             : null;
 
 
-    return (
-        <main>
-            <h2>Dashboard</h2>
+  return (
+    <main className="dashboard-page">
+      <section className="dashboard-hero">
+        <p className="dashboard-eyebrow">
+          Your VinoVault
+        </p>
 
-            <section>
-                <h3>Collection Overview</h3>
+        <h1>Dashboard</h1>
 
-                <p>Unique Wines: {cellarEntries.length}</p>
-                <p>Total Bottles: {totalBottles}</p>
-                <p>Tasting Notes: {tastingNotes.length}</p>
-            </section>
+        <p className="dashboard-description">
+          Review your collection, tasting activity, and recent
+          additions in one place.
+        </p>
+      </section>
 
+      <section className="dashboard-overview">
+        <div className="dashboard-section-heading">
+          <div>
+            <p className="dashboard-section-eyebrow">
+              Collection Summary
+            </p>
 
-            <section>
-                <h3>Collection by Wine Type</h3>
+            <h2>Collection Overview</h2>
+          </div>
 
-                {Object.keys(wineTypeCounts).length === 0 ? (
-                    <p>No collection data yet.</p>
-                ) : (
-                    Object.entries(wineTypeCounts).map(([type, count]) => (
-                    <p key={type}>
-                        {type}: {count}
-                    </p>
-                    ))
-                )}
-            </section>
+          <Link to="/cellar">
+            View My Cellar
+          </Link>
+        </div>
 
-            <section>
-                <h3>Tasting Summary</h3>
+        <div className="dashboard-stats">
+          <article>
+            <p>Unique Wines</p>
+            <strong>{cellarEntries.length}</strong>
+          </article>
 
-                {averageRating ? (
-                    <p>Average Rating: {averageRating} / 5</p>
-                ) : (
-                    <p>No tasting ratings yet.</p>
-                )}
-            </section>
+          <article>
+            <p>Total Bottles</p>
+            <strong>{totalBottles}</strong>
+          </article>
 
+          <article>
+            <p>Tasting Notes</p>
+            <strong>{tastingNotes.length}</strong>
+          </article>
 
-            <section>
-                <h3>Recent Cellar Additions</h3>
+          <article>
+            <p>Average Rating</p>
+            <strong>
+              {averageRating ? `${averageRating} / 5` : "—"}
+            </strong>
+          </article>
+        </div>
+      </section>
 
-                {recentCellarEntries.length === 0 ? (
-                    <p>No wines added to your cellar yet.</p>
-                ) : (
-                    recentCellarEntries.map((entry) => (
-                        <div key={entry.id}>
-                            <p>
-                            {entry.wine.name}
-                            {entry.wine.vintage ? ` (${entry.wine.vintage})` : ""}
-                            </p>
+      <section className="dashboard-breakdown">
+        <div className="dashboard-section-heading">
+          <div>
+            <p className="dashboard-section-eyebrow">
+              Cellar Composition
+            </p>
 
-                            <p>Quantity: {entry.quantity}</p>
+            <h2>Collection Breakdown</h2>
+          </div>
+        </div>
 
-                            <Link to={`/cellar/${entry.id}`}>
-                            View Cellar Entry
-                            </Link>
-                        </div>
-                    ))
-                )}
-            </section>
+        {Object.keys(wineTypeCounts).length === 0 ? (
+          <div className="dashboard-empty-state">
+            <p>No collection data yet.</p>
 
-            <section>
-                <h3>Recent Tasting Notes</h3>
+            <Link to="/browse">
+              Find Wines
+            </Link>
+          </div>
+        ) : (
+          <div className="dashboard-breakdown-grid">
+            {Object.entries(wineTypeCounts).map(([type, count]) => (
+              <article
+                className="dashboard-breakdown-card"
+                key={type}
+              >
+                <p>{type}</p>
+                <strong>{count}</strong>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
 
-                {recentTastingNotes.length === 0 ? (
-                    <p>No tasting notes yet.</p>
-                ) : (
-                    recentTastingNotes.map((note) => (
-                        <div key={note.id}>
-                            <p>
-                            {note.wine.name}
-                            {note.wine.vintage ? ` (${note.wine.vintage})` : ""}
-                            </p>
+      <section className="dashboard-recent-section">
+        <div className="dashboard-section-heading">
+          <div>
+            <p className="dashboard-section-eyebrow">
+              Recently Added
+            </p>
 
-                            <p>Rating: {note.rating} / 5</p>
+            <h2>Recent Cellar Additions</h2>
+          </div>
 
-                            <Link to={`/tasting-notes/${note.id}`}>
-                            View Tasting Note
-                            </Link>
-                        </div>
-                    ))
-                )}
-            </section>
+          <Link to="/cellar">
+            View All
+          </Link>
+        </div>
 
+        {recentCellarEntries.length === 0 ? (
+          <div className="dashboard-empty-state">
+            <p>No wines added to your cellar yet.</p>
 
-            <section>
-                <h3>Quick Actions</h3>
+            <Link to="/browse">
+              Browse Wines
+            </Link>
+          </div>
+        ) : (
+          <div className="dashboard-recent-grid">
+            {recentCellarEntries.map((entry) => (
+              <article
+                className="dashboard-recent-card"
+                key={entry.id}
+              >
+                <h3>
+                  {entry.wine.name}
+                  {entry.wine.vintage
+                    ? ` (${entry.wine.vintage})`
+                    : ""}
+                </h3>
 
-                <Link to="/browse">
-                    Browse Wines
+                <p>
+                  Quantity: {entry.quantity}
+                </p>
+
+                <Link to={`/cellar/${entry.id}`}>
+                  View Cellar Entry
                 </Link>
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
 
-                <Link to="/cellar">
-                    View My Cellar
-                </Link>
+      <section className="dashboard-recent-section">
+        <div className="dashboard-section-heading">
+          <div>
+            <p className="dashboard-section-eyebrow">
+              Recent Activity
+            </p>
 
-                <Link to="/tasting-notes">
-                    View Tasting Notes
+            <h2>Recent Tasting Notes</h2>
+          </div>
+
+          <Link to="/tasting-notes">
+            View All
+          </Link>
+        </div>
+
+        {recentTastingNotes.length === 0 ? (
+          <div className="dashboard-empty-state">
+            <p>No tasting notes yet.</p>
+
+            <Link to="/browse">
+              Find a Wine
+            </Link>
+          </div>
+        ) : (
+          <div className="dashboard-recent-grid">
+            {recentTastingNotes.map((note) => (
+              <article
+                className="dashboard-recent-card"
+                key={note.id}
+              >
+                <h3>
+                  {note.wine.name}
+                  {note.wine.vintage
+                    ? ` (${note.wine.vintage})`
+                    : ""}
+                </h3>
+
+                <p>
+                  Rating: {note.rating} / 5
+                </p>
+
+                <Link to={`/tasting-notes/${note.id}`}>
+                  View Tasting Note
                 </Link>
-            </section>
-        </main>
-    );
+              </article>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="dashboard-quick-actions">
+        <div className="dashboard-section-heading">
+          <div>
+            <p className="dashboard-section-eyebrow">
+              Keep Exploring
+            </p>
+
+            <h2>Quick Actions</h2>
+          </div>
+        </div>
+
+        <div className="dashboard-actions">
+          <Link to="/browse">
+            Browse Wines
+          </Link>
+
+          <Link to="/cellar">
+            View My Cellar
+          </Link>
+
+          <Link to="/tasting-notes">
+            View Tasting Notes
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
 }
 
 

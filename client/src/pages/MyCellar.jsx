@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import EmptyState from "../components/ui/EmptyState";
 import ErrorMessage from "../components/ui/ErrorMessage";
@@ -28,25 +29,74 @@ function MyCellar() {
   }, []);
 
   return (
-    <main>
-      <h2>My Cellar</h2>
+    <main className="cellar-page">
+      <section className="cellar-header">
+        <div className="cellar-header-content">
+          <p className="cellar-eyebrow">
+            Your Collection
+          </p>
 
-      {loading && <Loading message="Loading your cellar..." />}
+          <h1>My Cellar</h1>
 
-      {error && <ErrorMessage message={error} />}
+          <p className="cellar-description">
+            Manage the wines in your collection and keep track of
+            what you have on hand.
+          </p>
+        </div>
+
+        <Link
+          className="cellar-add-link"
+          to="/browse"
+        >
+          Add Wine
+        </Link>
+      </section>
+
+      {loading && (
+        <Loading message="Loading your cellar..." />
+      )}
+
+      {error && (
+        <ErrorMessage message={error} />
+      )}
 
       {!loading && !error && entries.length === 0 && (
-        <EmptyState message="Your cellar is empty." />
+        <section className="cellar-empty-state">
+          <EmptyState message="Your cellar is empty." />
+
+          <p>
+            Browse the catalog to find your first bottle.
+          </p>
+
+          <Link to="/browse">
+            Browse Wines
+          </Link>
+        </section>
       )}
 
       {!loading && !error && entries.length > 0 && (
-        <section>
-          {entries.map((entry) => (
-            <CellarCard
-              key={entry.id}
-              entry={entry}
-            />
-          ))}
+        <section className="cellar-collection">
+          <div className="cellar-section-heading">
+            <div>
+              <p className="cellar-section-eyebrow">
+                In Your Cellar
+              </p>
+
+              <h2>
+                {entries.length}{" "}
+                {entries.length === 1 ? "Wine" : "Wines"}
+              </h2>
+            </div>
+          </div>
+
+          <div className="cellar-grid">
+            {entries.map((entry) => (
+              <CellarCard
+                key={entry.id}
+                entry={entry}
+              />
+            ))}
+          </div>
         </section>
       )}
     </main>

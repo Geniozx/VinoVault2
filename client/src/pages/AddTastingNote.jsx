@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { 
+  Link,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
 import { createTastingNote } from "../services/tastingNoteService";
 import { getWineById } from "../services/wineService";
@@ -79,72 +83,129 @@ function AddTastingNote() {
 
 
   return (
-    <main>
-      <h2>Add Tasting Note</h2>
+    <main className="add-tasting-note-page">
+      <section className="add-tasting-note-header">
+        <div>
+          <p className="add-tasting-note-eyebrow">
+            Tasting Journal
+          </p>
 
-      <h3>{wine.name}</h3>
+          <h1>Add Tasting Note</h1>
 
-      {wine.vintage && (
-        <p>Vintage: {wine.vintage}</p>
-      )}
+          {wine && (
+            <div className="add-tasting-note-wine-summary">
+              <h2>{wine.name}</h2>
 
-      {wine.winery && (
-        <p>Winery: {wine.winery.name}</p>
-      )}
+              <div>
+                {wine.vintage && (
+                  <p>{wine.vintage}</p>
+                )}
+
+                {wine.winery && (
+                  <p>{wine.winery.name}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          <p className="add-tasting-note-description">
+            Record your rating and tasting impressions for this wine.
+          </p>
+        </div>
+      </section>
 
       {error && (
         <ErrorMessage message={error} />
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="rating">
-            Rating
-          </label>
+      <form
+        className="add-tasting-note-form"
+        onSubmit={handleSubmit}
+      >
+        <div className="add-tasting-note-form-layout">
+          <section className="add-tasting-note-form-section">
+            <div className="add-tasting-note-section-heading">
+              <p>Your Experience</p>
+              <h2>Tasting Details</h2>
+            </div>
 
-          <input
-            id="rating"
-            type="number"
-            min="1"
-            max="5"
-            value={rating}
-            onChange={(event) => setRating(event.target.value)}
-            required
-          />
+            <div className="add-tasting-note-form-grid">
+              <div className="add-tasting-note-field add-tasting-note-rating-field">
+                <label htmlFor="rating">
+                  Rating
+                </label>
+
+                <input
+                  id="rating"
+                  type="number"
+                  min="1"
+                  max="5"
+                  value={rating}
+                  onChange={(event) => setRating(event.target.value)}
+                  required
+                />
+
+                <p className="add-tasting-note-helper">
+                  Rate this wine from 1 to 5.
+                </p>
+              </div>
+
+              <div className="add-tasting-note-field add-tasting-note-date-field">
+                <label htmlFor="tastedOn">
+                  Tasting Date <span>(Optional)</span>
+                </label>
+
+                <input
+                  id="tastedOn"
+                  type="date"
+                  value={tastedOn}
+                  onChange={(event) => setTastedOn(event.target.value)}
+                />
+              </div>
+            </div>
+          </section>
+
+          <section className="add-tasting-note-form-section">
+            <div className="add-tasting-note-section-heading">
+              <p>Your Impressions</p>
+              <h2>Tasting Notes</h2>
+            </div>
+
+            <div className="add-tasting-note-field">
+              <label htmlFor="notes">
+                Notes
+              </label>
+
+              <textarea
+                id="notes"
+                rows="7"
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+                required
+              />
+
+              <p className="add-tasting-note-helper">
+                Describe what stood out, such as aroma, flavor,
+                finish, or overall impression.
+              </p>
+            </div>
+          </section>
         </div>
 
-        <div>
-          <label htmlFor="tastedOn">
-            Tasting Date
-          </label>
+        <div className="add-tasting-note-actions">
+          <button
+            type="submit"
+            disabled={submitting}
+          >
+            {submitting
+              ? "Saving..."
+              : "Save Tasting Note"}
+          </button>
 
-          <input
-            id="tastedOn"
-            type="date"
-            value={tastedOn}
-            onChange={(event) => setTastedOn(event.target.value)}
-          />
+          <Link to={`/wines/${wine.id}`}>
+            Cancel
+          </Link>
         </div>
-
-        <div>
-          <label htmlFor="notes">
-            Tasting Notes
-          </label>
-
-          <textarea
-            id="notes"
-            value={notes}
-            onChange={(event) => setNotes(event.target.value)}
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={submitting}
-        >
-          {submitting ? "Saving..." : "Save Tasting Note"}
-        </button>
       </form>
     </main>
   );

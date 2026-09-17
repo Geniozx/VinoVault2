@@ -63,85 +63,212 @@ function WineDetails() {
   }
 
   return (
-    <main>
-      <Link to="/browse">Back to Browse</Link>
+    <main className="wine-details-page">
+      <Link
+        className="wine-details-back-link"
+        to="/browse"
+      >
+        Back to Browse
+      </Link>
 
-      {wine.image_url && (
-        <img
-          src={wine.image_url}
-          alt={wine.name}
-        />
-      )}
-
-      <h2>{wine.name}</h2>
-
-      {wine.vintage && (
-        <p>Vintage: {wine.vintage}</p>
-      )}
-
-      {wine.winery && (
-        <p>Winery: {wine.winery.name}</p>
-      )}
-
-      {wine.region && (
-        <p>
-          Region: {wine.region.name}, {wine.region.country}
-        </p>
-      )}
-
-      <p>Type: {wine.wine_type}</p>
-
-      {wine.varietal && (
-        <p>Varietal: {wine.varietal}</p>
-      )}
-
-      {wine.description && (
-        <p>{wine.description}</p>
-      )}
-
-
-      {isAuthenticated && (
-        <section>
-          <h3>Your Tasting Notes</h3>
-
-          {tastingNotes.length === 0 ? (
-            <p>You have not added a tasting note for this wine yet.</p>
+      <section className="wine-details-hero">
+        <div className="wine-details-media">
+          {wine.image_url ? (
+            <img
+              src={wine.image_url}
+              alt={wine.name}
+            />
           ) : (
-            tastingNotes.map((note) => (
-              <div key={note.id}>
-                <p>Rating: {note.rating} / 5</p>
+            <div className="wine-details-placeholder">
+              <span aria-hidden="true">🍷</span>
+            </div>
+          )}
+        </div>
 
-                {note.tasted_on && (
-                  <p>Tasted On: {note.tasted_on}</p>
-                )}
+        <div className="wine-details-hero-content">
+          <p className="wine-details-eyebrow">
+            Wine Profile
+          </p>
 
-                <p>{note.notes}</p>
+          <h1>{wine.name}</h1>
 
-                <Link to={`/tasting-notes/${note.id}`}>
-                  View Tasting Note
+          <div className="wine-details-identity">
+            {wine.vintage && (
+              <p>{wine.vintage}</p>
+            )}
+
+            {wine.winery && (
+              <p>{wine.winery.name}</p>
+            )}
+
+            {wine.region && (
+              <p>
+                {wine.region.name}
+                {wine.region.country
+                  ? `, ${wine.region.country}`
+                  : ""}
+              </p>
+            )}
+          </div>
+
+          {wine.description && (
+            <p className="wine-details-description">
+              {wine.description}
+            </p>
+          )}
+        </div>
+      </section>
+
+      <div className="wine-details-content-grid">    
+        <section className="wine-details-profile">
+          <div className="wine-details-section-heading">
+            <p>At a Glance</p>
+            <h2>Wine Details</h2>
+          </div>
+
+          <div className="wine-details-profile-grid">
+            <div>
+              <span>Type</span>
+              <p>{wine.wine_type}</p>
+            </div>
+
+            {wine.varietal && (
+              <div>
+                <span>Varietal</span>
+                <p>{wine.varietal}</p>
+              </div>
+            )}
+
+            {wine.body && (
+              <div>
+                <span>Body</span>
+                <p>{wine.body}</p>
+              </div>
+            )}
+
+            {wine.acidity && (
+              <div>
+                <span>Acidity</span>
+                <p>{wine.acidity}</p>
+              </div>
+            )}
+
+            {wine.alcohol_content && (
+              <div>
+                <span>Alcohol</span>
+                <p>{wine.alcohol_content}%</p>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {isAuthenticated && (
+          <section className="wine-details-tasting">
+            <div className="wine-details-section-heading">
+              <p>Your Journal</p>
+              <h2>Your Tasting Notes</h2>
+            </div>
+
+            {tastingNotes.length === 0 ? (
+              <div className="wine-details-tasting-empty">
+                <p>
+                  You have not added a tasting note for this wine yet.
+                </p>
+
+                <Link
+                  to={`/tasting-notes/add?wine=${wine.id}`}
+                >
+                  Add Tasting Note
                 </Link>
               </div>
-            ))
-          )}
-        </section>
-      )}
+            ) : (
+              <div className="wine-details-tasting-grid">
+                {tastingNotes.map((note) => (
+                  <article
+                    className="wine-details-tasting-card"
+                    key={note.id}
+                  >
+                    <div className="wine-details-tasting-meta">
+                      <div>
+                        <span>Rating</span>
+                        <p className="wine-details-tasting-rating">
+                          {note.rating} / 5
+                        </p>
+                      </div>
 
+                      {note.tasted_on && (
+                        <div>
+                          <span>Tasted On</span>
+                          <p>{note.tasted_on}</p>
+                        </div>
+                      )}
+                    </div>
 
-      {isAuthenticated ? (
-        <Link to={`/cellar/add?wine=${wine.id}`}>
-          Add to My Cellar
-        </Link>
-      ) : (
-        <Link to="/login">
-          Login to Add to Cellar
-        </Link>
-      )}
+                    <p className="wine-details-tasting-notes">
+                      {note.notes}
+                    </p>
 
-      {isAuthenticated && (
-        <Link to={`/tasting-notes/add?wine=${wine.id}`}>
-          Add Tasting Note
-        </Link>
-      )}
+                    <Link to={`/tasting-notes/${note.id}`}>
+                      View Tasting Note
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+      </ div>
+
+      <section className="wine-details-actions">
+        {isAuthenticated ? (
+          <>
+            <div className="wine-details-actions-content">
+              <p>Make It Yours</p>
+              <h2>Add This Wine</h2>
+              <p>
+                Save it to your cellar or record your experience
+                in your tasting journal.
+              </p>
+            </div>
+
+            <div className="wine-details-action-links">
+              <Link
+                className="wine-details-primary-action"
+                to={`/cellar/add?wine=${wine.id}`}
+              >
+                Add to My Cellar
+              </Link>
+
+              <Link
+                className="wine-details-secondary-action"
+                to={`/tasting-notes/add?wine=${wine.id}`}
+              >
+                Add Tasting Note
+              </Link>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="wine-details-actions-content">
+              <p>Build Your Collection</p>
+              <h2>Save Your Wine Journey</h2>
+              <p>
+                Sign in to save this wine to your cellar and record
+                your tasting notes.
+              </p>
+            </div>
+
+            <div className="wine-details-action-links">
+              <Link
+                className="wine-details-primary-action"
+                to="/login"
+              >
+                Sign In
+              </Link>
+            </div>
+          </>
+        )}
+      </section>
     </main>
   );
 }

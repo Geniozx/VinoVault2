@@ -1,41 +1,67 @@
 import { Link } from "react-router-dom";
 
-
 function WineCard({ wine }) {
   return (
-    <article>
-      {wine.image_url && (
-        <img
-          src={wine.image_url}
-          alt={wine.name}
-        />
-      )}
+    <article className="wine-card">
+      <div className="wine-card-media">
+        {wine.image_url ? (
+          <img
+            src={wine.image_url}
+            alt={wine.name}
+          />
+        ) : (
+          <div className="wine-card-placeholder">
+            <span aria-hidden="true">🍷</span>
+          </div>
+        )}
+      </div>
 
-      <h3>{wine.name}</h3>
+      <div className="wine-card-content">
+        <div className="wine-card-heading">
+          <h3>{wine.name}</h3>
 
-      {wine.vintage && (
-        <p>Vintage: {wine.vintage}</p>
-      )}
+          <div className="wine-card-wine-meta">
+            {wine.vintage && (
+              <p>{wine.vintage}</p>
+            )}
 
-      {wine.winery && (
-        <p>Winery: {wine.winery.name}</p>
-      )}
+            {wine.winery && (
+              <p>{wine.winery.name}</p>
+            )}
+          </div>
+        </div>
 
-      {wine.region && (
-        <p>
-          Region: {wine.region.name}, {wine.region.country}
-        </p>
-      )}
+        <div className="wine-card-details">
+          {wine.region && (
+            <div>
+              <span>Region</span>
+              <p>
+                {wine.region.name}
+                {wine.region.country &&
+                  `, ${wine.region.country}`}
+              </p>
+            </div>
+          )}
 
-      <p>Type: {wine.wine_type}</p>
+          <div>
+            <span>Type</span>
+            <p>{wine.wine_type}</p>
+          </div>
 
-      {wine.varietal && (
-        <p>Varietal: {wine.varietal}</p>
-      )}
+          {wine.varietal && (
+            <div>
+              <span>Varietal</span>
+              <p>{wine.varietal}</p>
+            </div>
+          )}
+        </div>
 
-      <Link to={`/wines/${wine.id}`}>
-        View Details
-      </Link>
+        <div className="wine-card-actions">
+          <Link to={`/wines/${wine.id}`}>
+            View Wine
+          </Link>
+        </div>
+      </div>
     </article>
   );
 }

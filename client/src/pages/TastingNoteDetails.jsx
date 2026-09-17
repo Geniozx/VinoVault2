@@ -74,58 +74,117 @@ function TastingNoteDetails() {
 
 
     return (
-        <main>
-            <Link to="/tasting-notes">
+        <main className="tasting-note-details-page">
+            <Link
+                className="tasting-note-details-back-link"
+                to="/tasting-notes"
+            >
                 Back to My Tasting Notes
             </Link>
 
-            <h2>Tasting Note</h2>
+            <section className="tasting-note-details-hero">
+                <div className="tasting-note-details-hero-content">
+                    <p className="tasting-note-details-eyebrow">
+                        Tasting Journal
+                    </p>
 
-            <section>
-                <h3>{note.wine.name}</h3>
+                    <h1>{note.wine.name}</h1>
 
-                {note.wine.vintage && (
-                <p>Vintage: {note.wine.vintage}</p>
-                )}
+                    <div className="tasting-note-details-wine-meta">
+                        {note.wine.vintage && (
+                            <p>{note.wine.vintage}</p>
+                        )}
 
-                {note.wine.winery && (
-                <p>Winery: {note.wine.winery.name}</p>
-                )}
-
-                {note.wine.region && (
-                <p>
-                    Region: {note.wine.region.name}
-                    {note.wine.region.country
-                    ? `, ${note.wine.region.country}`
-                    : ""}
-                </p>
-                )}
+                        {note.wine.winery && (
+                            <p>{note.wine.winery.name}</p>
+                        )}
+                    </div>
+                </div>
             </section>
 
-            <section>
-                <h3>Your Tasting</h3>
+            <section className="tasting-note-details-grid">
+                <article className="tasting-note-details-panel">
+                    <div className="tasting-note-details-section-heading">
+                        <p>Wine Details</p>
+                        <h2>About This Wine</h2>
+                    </div>
 
-                <p>Rating: {note.rating} / 5</p>
+                    <div className="tasting-note-details-info-grid">
+                        {note.wine.vintage && (
+                            <div>
+                            <span>Vintage</span>
+                            <p>{note.wine.vintage}</p>
+                            </div>
+                        )}
 
-                {note.tasted_on && (
-                <p>Tasted On: {note.tasted_on}</p>
-                )}
+                        {note.wine.winery && (
+                            <div>
+                            <span>Winery</span>
+                            <p>{note.wine.winery.name}</p>
+                            </div>
+                        )}
 
-                <p>{note.notes}</p>
+                        {note.wine.region && (
+                            <div>
+                            <span>Region</span>
+
+                            <p>
+                                {note.wine.region.name}
+                                {note.wine.region.country
+                                ? `, ${note.wine.region.country}`
+                                : ""}
+                            </p>
+                            </div>
+                        )}
+                    </div>
+                </article>
+
+                <article className="tasting-note-details-panel">
+                    <div className="tasting-note-details-section-heading">
+                        <p>Your Experience</p>
+                        <h2>Your Tasting</h2>
+                    </div>
+
+                    <div className="tasting-note-details-info-grid">
+                        <div className="tasting-note-details-rating">
+                            <span>Rating</span>
+                            <p>
+                                <strong>{note.rating} / 5</strong>
+                            </p>
+                        </div>
+
+                        {note.tasted_on && (
+                            <div>
+                                <span>Tasted On</span>
+                                <p>{note.tasted_on}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {note.notes && (
+                    <div className="tasting-note-details-notes">
+                        <span>Tasting Notes</span>
+                        <p>{note.notes}</p>
+                    </div>
+                    )}
+                </article>
             </section>
 
-            <Link to={`/tasting-notes/${note.id}/edit`}>
-                Edit Tasting Note
-            </Link>
+            <section className="tasting-note-details-actions">
+                <Link to={`/tasting-notes/${note.id}/edit`}>
+                    Edit Tasting Note
+                </Link>
 
-
-            <button
-                type="button"
-                onClick={handleDelete}
-                disabled={deleting}
+                <button
+                    type="button"
+                    onClick={handleDelete}
+                    disabled={deleting}
                 >
-                {deleting ? "Deleting..." : "Delete Tasting Note"}
-            </button>
+                    {deleting
+                    ? "Deleting..."
+                    : "Delete Tasting Note"}
+                </button>
+            </section>
         </main>
     );
 }
