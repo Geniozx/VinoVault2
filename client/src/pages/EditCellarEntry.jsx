@@ -76,6 +76,16 @@ function EditCellarEntry() {
   }
 
 
+  if (error && !wine) {
+    return (
+      <main>
+        <ErrorMessage message={error} />
+        <Link to="/cellar">Back to My Cellar</Link>
+      </main>
+    );
+  }
+
+
 
   return (
     <main className="edit-cellar-page">

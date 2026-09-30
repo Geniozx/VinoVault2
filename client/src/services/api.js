@@ -1,5 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+let refreshPromise = null;
+
 async function refreshAccessToken() {
   const refreshToken = localStorage.getItem("refreshToken");
 
@@ -59,11 +61,22 @@ export async function apiRequest(endpoint, options = {}) {
   const refreshToken = localStorage.getItem("refreshToken");
 
   if (!refreshToken) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+
+    window.dispatchEvent(new Event("auth:session-expired"));
+
     return response;
   }
 
   try {
-    const newAccessToken = await refreshAccessToken();
+    if (!refreshPromise) {
+      refreshPromise = refreshAccessToken().finally(() => {
+        refreshPromise = null;
+      });
+    }
+
+    const newAccessToken = await refreshPromise;
 
     response = await makeRequest(newAccessToken);
 
@@ -71,6 +84,8 @@ export async function apiRequest(endpoint, options = {}) {
   } catch {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+
+    window.dispatchEvent(new Event("auth:session-expired"));
 
     return response;
   }

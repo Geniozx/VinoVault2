@@ -60,6 +60,26 @@ export function AuthProvider({ children }) {
     restoreUser();
   }, []);
 
+
+  useEffect(() => {
+    function handleSessionExpired() {
+      setUser(null);
+    }
+
+    window.addEventListener(
+      "auth:session-expired",
+      handleSessionExpired
+    );
+
+    return () => {
+      window.removeEventListener(
+        "auth:session-expired",
+        handleSessionExpired
+      );
+    };
+  }, []);
+  
+
   async function login(credentials) {
     const tokens = await loginUser(credentials);
 

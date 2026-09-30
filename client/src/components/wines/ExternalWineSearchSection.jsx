@@ -32,8 +32,8 @@ function ExternalWineSearchSection() {
       const data = await searchExternalWines(searchQuery);
 
       setWines(data);
-    } catch {
-      setError("Unable to search wines right now.");
+    } catch (err) {
+      setError(err.message);
       setWines([]);
     } finally {
       setLoading(false);

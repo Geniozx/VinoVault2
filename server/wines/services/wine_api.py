@@ -6,7 +6,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-WINE_API_BASE_URL = "https://api.wineapi.io"
+WINE_API_BASE_URL = os.getenv(
+    "WINE_API_BASE_URL",
+    "https://api.wineapi.io",
+)
 WINE_API_KEY = os.getenv("WINE_API_KEY")
 
 

@@ -6,7 +6,13 @@ export async function searchExternalWines(query) {
   );
 
   if (!response.ok) {
-    throw new Error("Unable to search external wines.");
+    const data = await response.json();
+
+    throw new Error(
+      data.error ||
+      data.detail ||
+      "Unable to search external wines."
+    );
   }
 
   return response.json();
@@ -18,7 +24,13 @@ export async function getExternalWineDetails(externalId) {
   );
 
   if (!response.ok) {
-    throw new Error("Unable to load external wine details.");
+    const data = await response.json();
+
+    throw new Error(
+      data.error ||
+      data.detail ||
+      "Unable to load external wine details."
+    );
   }
 
   return response.json();
@@ -33,7 +45,13 @@ export async function importExternalWine(externalId) {
   );
 
   if (!response.ok) {
-    throw new Error("Unable to import wine.");
+    const data = await response.json();
+
+    throw new Error(
+      data.error ||
+      data.detail ||
+      "Unable to import wine."
+    );
   }
 
   return response.json();

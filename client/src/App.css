@@ -115,7 +115,7 @@
       rgba(5, 5, 4, 0.28) 62%,
       rgba(5, 5, 4, 0.08) 100%
     ),
-    url("/VinoVault-Wines-wider.png");
+    url("/Moody VinoVault Wine Still Life.png");
 
   background-size: cover;
   background-position: center;
@@ -263,7 +263,6 @@
   padding: 1rem 1.25rem;
 
   background: rgba(5, 5, 4, 0.18);
-  backdrop-filter: blur(6px);
 }
 
 .public-home-features article::before {

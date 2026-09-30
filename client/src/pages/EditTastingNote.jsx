@@ -72,7 +72,14 @@ function EditTastingNote() {
   }
 
   if (error && !note) {
-    return <ErrorMessage message={error} />;
+    return (
+      <main>
+        <ErrorMessage message={error} />
+        <Link to="/tasting-notes">
+          Back to My Tasting Notes
+        </Link>
+      </main>
+    );
   }
 
 

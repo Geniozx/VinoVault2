@@ -33,8 +33,8 @@ function ExternalWineDetails() {
             const data = await getExternalWineDetails(externalId);
 
             setWine(data);
-        } catch {
-            setError("Unable to load wine details.");
+        } catch (err) {
+            setError(err.message);
         } finally {
             setLoading(false);
         }
@@ -51,8 +51,8 @@ function ExternalWineDetails() {
             const data = await importExternalWine(externalId);
 
             setImportedWine(data);
-        } catch {
-            setImportError("Unable to import wine.");
+        } catch (err) {
+            setImportError(err.message);
         } finally {
             setImporting(false);
         }

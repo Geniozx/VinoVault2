@@ -41,8 +41,15 @@ function TastingNoteDetails() {
         return <Loading />;
     }
 
-    if (error) {
-        return <ErrorMessage message={error} />;
+    if (error && !note) {
+        return (
+            <main>
+                <ErrorMessage message={error} />
+                <Link to="/tasting-notes">
+                    Back to My Tasting Notes
+                </Link>
+            </main>
+        );
     }
 
     if (!note) {
@@ -169,6 +176,10 @@ function TastingNoteDetails() {
                     )}
                 </article>
             </section>
+
+            {error && (
+                <ErrorMessage message={error} />
+            )}
 
             <section className="tasting-note-details-actions">
                 <Link to={`/tasting-notes/${note.id}/edit`}>

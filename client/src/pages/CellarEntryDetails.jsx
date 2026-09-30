@@ -43,7 +43,7 @@ function CellarEntryDetails() {
     );
   }
 
-  if (error) {
+  if (error && !entry) {
     return (
       <main>
         <ErrorMessage message={error} />
@@ -186,6 +186,11 @@ function CellarEntryDetails() {
           )}
         </article>
       </section>
+
+
+      {error && (
+        <ErrorMessage message={error} />
+      )}
 
       <section className="cellar-entry-actions">
         <Link to={`/cellar/${entry.id}/edit`}>

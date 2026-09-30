@@ -30,8 +30,41 @@ class CellarEntrySerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
+    def validate(self, attrs):
+        request = self.context.get("request")
+        wine = attrs.get("wine")
+
+        if request and wine:
+            existing_entries = CellarEntry.objects.filter(
+                user=request.user,
+                wine=wine,
+            )
+
+            if self.instance:
+                existing_entries = existing_entries.exclude(
+                    pk=self.instance.pk
+                )
+
+            if existing_entries.exists():
+                raise serializers.ValidationError(
+                    {
+                        "wine_id": (
+                            "This wine is already in your cellar."
+                        )
+                    }
+                )
+
+        return attrs
+
 
 class TastingNoteSerializer(serializers.ModelSerializer):
+    rating = serializers.IntegerField(
+        min_value=1,
+        max_value=5,
+        required=False,
+        allow_null=True,
+    )
+    
     wine = WineSerializer(read_only=True)
 
     wine_id = serializers.PrimaryKeyRelatedField(

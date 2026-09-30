@@ -42,7 +42,15 @@ function Dashboard() {
     }
 
     if (error) {
-        return <ErrorMessage message={error} />;
+        return (
+            <main>
+                <ErrorMessage message={error} />
+
+                <Link to="/">
+                    Back to Home
+                </Link>
+            </main>
+        );
     }
 
 

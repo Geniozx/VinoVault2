@@ -33,6 +33,9 @@ export async function createTastingNote(noteData) {
     const data = await response.json();
 
     throw new Error(
+      data.rating?.[0] ||
+      data.notes?.[0] ||
+      data.wine_id?.[0] ||
       data.detail ||
       data.non_field_errors?.[0] ||
       "Unable to create tasting note."
@@ -50,7 +53,16 @@ export async function updateTastingNote(id, noteData) {
   });
 
   if (!response.ok) {
-    throw new Error("Unable to update tasting note.");
+    const data = await response.json();
+
+    throw new Error(
+      data.rating?.[0] ||
+      data.notes?.[0] ||
+      data.wine_id?.[0] ||
+      data.detail ||
+      data.non_field_errors?.[0] ||
+      "Unable to update tasting note."
+    );
   }
 
   return response.json();

@@ -53,12 +53,12 @@ vinovault2/
 * Phase 11 — External Wine Data Integration ✅
 * Phase 12 — Authentication Hardening ✅
 * Phase 13 — UI/UX Polish & Responsive Design ✅
+* Phase 14 — Testing, Error Handling & Quality ✅
 
 
 
 ## Remaining Roadmap
 
-- Phase 14 — Testing, Error Handling & Quality
 - Phase 15 — Deployment & Production Readiness
 - Phase 16 — Portfolio & Interview Readiness
 
@@ -504,7 +504,7 @@ The following frontend behavior has been verified:
 ```bash
 cd client
 npm install
-npm run dev
+npm run dev -- --host
 ```
 
 The frontend API URL is configured through:
@@ -524,7 +524,7 @@ VITE_API_URL=http://127.0.0.1:8000/api
 ```bash
 cd server
 source venv/bin/activate
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
 
 ### Backend Validation
@@ -1597,6 +1597,20 @@ Redesigned and verified:
 
 The public Home page now uses a cinematic wine-focused hero experience with responsive desktop and mobile layouts.
 
+
+### Public Home Page Visual Update
+
+- Replaced the public Home page hero background with the finalized VinoVault cinematic background.
+- New background composition includes:
+  - VinoVault-branded wine bottle and wine glass
+  - Framed vineyard artwork
+  - Decorative foliage
+  - Wine-themed books and tabletop details
+- Background composition intentionally leaves dark negative space for the Home page hero content.
+- Removed the blur from `.public-home-feature-article` so the books and surrounding background details remain visible.
+- Public Home page visual direction is now finalized.
+
+
 ### Phase 13 Authenticated Experience
 
 Redesigned and verified:
@@ -1638,3 +1652,36 @@ Wine Profile
 At a Glance + Tasting Journal
       ↓
 Collection / Tasting Actions
+
+
+
+
+
+---
+
+## Phase 14 — Testing, Error Handling & Quality ✅
+
+Strengthened VinoVault's reliability across the Django REST API, React frontend, JWT authentication flow, protected resources, and external WineAPI integration.
+
+### Phase 14 Backend Testing
+
+Expanded the Django automated test suite to cover core application behavior and failure scenarios.
+
+Verified:
+
+- Authentication endpoints
+- JWT-protected API access
+- Cellar ownership isolation
+- Tasting-note ownership isolation
+- Invalid and nonexistent resource handling
+- External wine search behavior
+- External wine detail behavior
+- External wine import behavior
+- External WineAPI failure handling
+- Duplicate external wine import behavior
+- Existing catalog permissions and functionality
+
+The completed backend test suite contains:
+
+```text
+51 tests
