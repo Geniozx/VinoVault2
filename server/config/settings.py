@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 from pathlib import Path
 
 import os
+import dj_database_url
 from dotenv import load_dotenv
 
 from datetime import timedelta
@@ -28,13 +29,35 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
+SECURE_SSL_REDIRECT = os.getenv(
+    "SECURE_SSL_REDIRECT",
+    "False",
+).lower() == "true"
+
+SESSION_COOKIE_SECURE = os.getenv(
+    "SESSION_COOKIE_SECURE",
+    "False",
+).lower() == "true"
+
+CSRF_COOKIE_SECURE = os.getenv(
+    "CSRF_COOKIE_SECURE",
+    "False",
+).lower() == "true"
+
+SECURE_PROXY_SSL_HEADER = (
+    "HTTP_X_FORWARDED_PROTO",
+    "https",
+)
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "192.168.0.128",
-    "172.27.204.105",
+    host.strip()
+    for host in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1",
+    ).split(",")
+    if host.strip()
 ]
 
 
@@ -69,10 +92,21 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://192.168.0.128:5173",
-    "http://192.168.0.128:5174",
+    origin.strip()
+    for origin in os.getenv(
+        "CORS_ALLOWED_ORIGINS",
+        "http://localhost:5173",
+    ).split(",")
+    if origin.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        "CSRF_TRUSTED_ORIGINS",
+        "",
+    ).split(",")
+    if origin.strip()
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -98,16 +132,28 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+            "HOST": os.getenv("DB_HOST"),
+            "PORT": os.getenv("DB_PORT"),
+        }
+    }
 
 
 # Password validation
@@ -144,17 +190,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+# MAILERS = {
+#     'default': {
+#         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+#     },
+# }
 
 
 AUTH_USER_MODEL = "users.User"

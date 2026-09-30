@@ -1685,3 +1685,72 @@ The completed backend test suite contains:
 
 ```text
 51 tests
+
+
+
+
+## Phase 15 — Production & Deployment Preparation
+
+Prepared VinoVault for production deployment using Heroku for both the React frontend and Django backend.
+
+### Backend Production Configuration
+
+- Moved Django `DEBUG` configuration to environment variables.
+- Moved `ALLOWED_HOSTS` and CORS configuration to environment variables.
+- Added environment-based HTTPS security settings:
+  - `SECURE_SSL_REDIRECT`
+  - `SESSION_COOKIE_SECURE`
+  - `CSRF_COOKIE_SECURE`
+- Added `SECURE_PROXY_SSL_HEADER` for Heroku HTTPS proxy handling.
+- Added environment-based `CSRF_TRUSTED_ORIGINS`.
+- Added a production `STATIC_ROOT`.
+- Verified Django static collection with `collectstatic`.
+- Removed unused development email configuration.
+- Generated and configured a production-safe Django secret key.
+
+### Production Server
+
+- Added Gunicorn as the production WSGI server.
+- Added a Heroku `Procfile`.
+- Verified the Django application runs successfully through Gunicorn.
+- Verified database-backed API requests through Gunicorn.
+- Added Python 3.12 runtime configuration for Heroku.
+
+### Database Configuration
+
+- Added `dj-database-url`.
+- Added support for Heroku's `DATABASE_URL`.
+- Preserved the existing local PostgreSQL `DB_*` configuration as the development fallback.
+- Enabled SSL for production database connections.
+- Verified both local PostgreSQL and `DATABASE_URL` database configuration paths.
+- Provisioned a Heroku Postgres Essential 0 production database.
+
+### Environment Configuration
+
+- Added `server/.env.example`.
+- Added `client/.env.example`.
+- Verified real `.env` files remain excluded from Git.
+- Added production WineAPI configuration through Heroku environment variables.
+- Kept secrets and database credentials outside source control.
+
+### Production Security Verification
+
+Production-style Django deployment checks were run with:
+
+- `DEBUG=False`
+- HTTPS redirect enabled
+- Secure session cookies enabled
+- Secure CSRF cookies enabled
+- Production host configuration
+- Production CORS/CSRF configuration
+
+The only remaining Django deployment warning is HSTS configuration, which is intentionally deferred until the live HTTPS deployment is verified.
+
+### Deployment Architecture
+
+VinoVault will use two Heroku applications:
+
+- React + Vite frontend
+- Django REST Framework + Gunicorn backend
+
+The backend uses Heroku Postgres and integrates with the external WineAPI service.
