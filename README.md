@@ -1754,3 +1754,29 @@ VinoVault will use two Heroku applications:
 - Django REST Framework + Gunicorn backend
 
 The backend uses Heroku Postgres and integrates with the external WineAPI service.
+
+
+
+
+### Heroku Backend Deployment
+
+- Deployed the Django backend to Heroku using the Python buildpack.
+- Deployed the `server/` directory from the monorepo using a Git subtree.
+- Provisioned and connected Heroku Postgres Essential 0.
+- Ran all Django production migrations successfully.
+- Verified 17 production database tables through Django database introspection.
+- Started the production application using Gunicorn on an Eco web dyno.
+- Verified the public wines endpoint returns `200 OK`.
+- Verified the deployed backend can communicate successfully with WineAPI.
+- Confirmed production WineAPI search returns normalized external wine data.
+
+### React Frontend Deployment Preparation
+
+- Created a separate Heroku application for the React frontend.
+- Added `serve` as the production static server.
+- Added a production `npm start` command using Heroku's `$PORT`.
+- Added a frontend `Procfile`.
+- Configured the frontend production `VITE_API_URL` to use the deployed Django API.
+- Configured Django CORS and CSRF trusted origins for the production frontend.
+- Verified the Vite production build can be served locally using the production start command.
+- Verified ESLint and the Vite production build pass successfully.
