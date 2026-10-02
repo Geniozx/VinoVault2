@@ -1652,11 +1652,11 @@ Wine Profile
 At a Glance + Tasting Journal
       ↓
 Collection / Tasting Actions
+```
+
+
 
 ---
-
-
-
 
 ## Phase 14 — Testing, Error Handling & Quality ✅
 
@@ -1684,7 +1684,7 @@ The completed backend test suite contains:
 
 ```text
 51 tests
-
+```
 
 
 
@@ -1791,11 +1791,13 @@ The completed backend test suite contains:
 - Production HTTPS operational.
 - `SECURE_HSTS_SECONDS` added with a conservative initial production value of `3600`.
 
-### Remaining Phase 15 Check
+### Phase 15 Completion
 
-Before Phase 15 is marked complete:
+- Final HSTS configuration deployed successfully.
+- Production Django confirmed `SECURE_HSTS_SECONDS=3600`.
+- Live HTTPS responses confirmed the `Strict-Transport-Security: max-age=3600` header.
+- Final Django deployment check completed.
+- Remaining HSTS subdomain and preload warnings are intentionally deferred.
+- Production end-to-end validation completed successfully.
 
-- Deploy the final `SECURE_HSTS_SECONDS` Django settings change.
-- Verify the live production HSTS response header.
-- Run the final Django production deployment check.
-- Commit and push the final Phase 15 documentation/configuration changes.
+**Phase 15 — Deployment & Production Readiness complete.**
