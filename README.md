@@ -54,12 +54,12 @@ vinovault2/
 * Phase 12 — Authentication Hardening ✅
 * Phase 13 — UI/UX Polish & Responsive Design ✅
 * Phase 14 — Testing, Error Handling & Quality ✅
+* Phase 15 — Deployment & Production Readiness ✅
 
 
 
 ## Remaining Roadmap
 
-- Phase 15 — Deployment & Production Readiness
 - Phase 16 — Portfolio & Interview Readiness
 
 ---
@@ -1653,11 +1653,10 @@ At a Glance + Tasting Journal
       ↓
 Collection / Tasting Actions
 
-
-
-
-
 ---
+
+
+
 
 ## Phase 14 — Testing, Error Handling & Quality ✅
 
@@ -1689,94 +1688,114 @@ The completed backend test suite contains:
 
 
 
-## Phase 15 — Production & Deployment Preparation
+## Phase 15 — Deployment
 
-Prepared VinoVault for production deployment using Heroku for both the React frontend and Django backend.
+### Production Preparation
 
-### Backend Production Configuration
-
-- Moved Django `DEBUG` configuration to environment variables.
-- Moved `ALLOWED_HOSTS` and CORS configuration to environment variables.
-- Added environment-based HTTPS security settings:
+- Refactored Django settings for environment-based production configuration.
+- Added environment-driven configuration for:
+  - `SECRET_KEY`
+  - `DEBUG`
+  - `ALLOWED_HOSTS`
+  - `CORS_ALLOWED_ORIGINS`
+  - `CSRF_TRUSTED_ORIGINS`
   - `SECURE_SSL_REDIRECT`
   - `SESSION_COOKIE_SECURE`
   - `CSRF_COOKIE_SECURE`
-- Added `SECURE_PROXY_SSL_HEADER` for Heroku HTTPS proxy handling.
-- Added environment-based `CSRF_TRUSTED_ORIGINS`.
-- Added a production `STATIC_ROOT`.
-- Verified Django static collection with `collectstatic`.
-- Removed unused development email configuration.
-- Generated and configured a production-safe Django secret key.
-
-### Production Server
-
+  - `SECURE_HSTS_SECONDS`
+- Added `SECURE_PROXY_SSL_HEADER` for HTTPS detection behind Heroku's proxy.
+- Added `STATIC_ROOT` for production static-file collection.
+- Added `DATABASE_URL` support while preserving the local PostgreSQL configuration.
+- Added `dj-database-url` for production database configuration.
 - Added Gunicorn as the production WSGI server.
-- Added a Heroku `Procfile`.
-- Verified the Django application runs successfully through Gunicorn.
-- Verified database-backed API requests through Gunicorn.
-- Added Python 3.12 runtime configuration for Heroku.
+- Added `.env.example` files for the Django backend and React frontend.
+- Confirmed real `.env` files remain excluded from Git.
 
-### Database Configuration
+### Production Security
 
-- Added `dj-database-url`.
-- Added support for Heroku's `DATABASE_URL`.
-- Preserved the existing local PostgreSQL `DB_*` configuration as the development fallback.
-- Enabled SSL for production database connections.
-- Verified both local PostgreSQL and `DATABASE_URL` database configuration paths.
-- Provisioned a Heroku Postgres Essential 0 production database.
-
-### Environment Configuration
-
-- Added `server/.env.example`.
-- Added `client/.env.example`.
-- Verified real `.env` files remain excluded from Git.
-- Added production WineAPI configuration through Heroku environment variables.
-- Kept secrets and database credentials outside source control.
-
-### Production Security Verification
-
-Production-style Django deployment checks were run with:
-
-- `DEBUG=False`
-- HTTPS redirect enabled
-- Secure session cookies enabled
-- Secure CSRF cookies enabled
-- Production host configuration
-- Production CORS/CSRF configuration
-
-The only remaining Django deployment warning is HSTS configuration, which is intentionally deferred until the live HTTPS deployment is verified.
-
-### Deployment Architecture
-
-VinoVault will use two Heroku applications:
-
-- React + Vite frontend
-- Django REST Framework + Gunicorn backend
-
-The backend uses Heroku Postgres and integrates with the external WineAPI service.
-
-
-
+- Production security settings are controlled through environment variables.
+- HTTPS redirect is enabled in production.
+- Secure session cookies are enabled in production.
+- Secure CSRF cookies are enabled in production.
+- Added environment-driven HTTP Strict Transport Security (HSTS) configuration:
+  - `SECURE_HSTS_SECONDS` defaults to `0` for local development.
+  - Production is configured with an initial one-hour (`3600` seconds) HSTS policy.
+  - `SECURE_HSTS_INCLUDE_SUBDOMAINS` and `SECURE_HSTS_PRELOAD` remain disabled intentionally while the production deployment is being validated.
+- Production secrets and API keys are stored as Heroku config variables and are not committed to Git.
 
 ### Heroku Backend Deployment
 
-- Deployed the Django backend to Heroku using the Python buildpack.
-- Deployed the `server/` directory from the monorepo using a Git subtree.
-- Provisioned and connected Heroku Postgres Essential 0.
-- Ran all Django production migrations successfully.
-- Verified 17 production database tables through Django database introspection.
-- Started the production application using Gunicorn on an Eco web dyno.
-- Verified the public wines endpoint returns `200 OK`.
-- Verified the deployed backend can communicate successfully with WineAPI.
-- Confirmed production WineAPI search returns normalized external wine data.
+- Deployed the Django REST API to Heroku.
+- Configured the Heroku Python buildpack.
+- Added a backend `Procfile` using Gunicorn.
+- Added `.python-version` for the production Python runtime.
+- Provisioned Heroku Postgres Essential 0.
+- Applied all Django migrations successfully in production.
+- Verified the production database contains the expected Django and VinoVault tables.
+- Configured production CORS and CSRF trusted origins for the deployed React frontend.
+- Verified the public `/api/wines/` endpoint responds successfully.
+- Verified the external WineAPI integration works from the production backend.
 
-### React Frontend Deployment Preparation
+### React Frontend Deployment
 
-- Created a separate Heroku application for the React frontend.
+- Deployed the React/Vite frontend as a separate Heroku application.
+- Configured the Heroku Node.js buildpack.
 - Added `serve` as the production static server.
-- Added a production `npm start` command using Heroku's `$PORT`.
+- Added an `npm start` production command using Heroku's `$PORT`.
 - Added a frontend `Procfile`.
-- Configured the frontend production `VITE_API_URL` to use the deployed Django API.
-- Configured Django CORS and CSRF trusted origins for the production frontend.
-- Verified the Vite production build can be served locally using the production start command.
-- Verified ESLint and the Vite production build pass successfully.
+- Configured `VITE_API_URL` to target the deployed Django API.
+- Verified the Vite production build completes successfully.
+- Verified SPA fallback routing with React Router.
+- Verified direct navigation and refreshes on routes such as `/login` without 404 errors.
+- Verified production assets, styling, and the VinoVault public home page render correctly.
+
+### Production End-to-End Validation
+
+- Completed production end-to-end smoke testing.
+- Verified public frontend rendering and React Router direct-route refreshes.
+- Verified production account registration and PostgreSQL persistence.
+- Verified login and JWT-authenticated API requests.
+- Verified authenticated session restoration after browser refresh.
+- Verified logout and protected-route behavior.
+- Verified fresh login after logout.
+- Verified the authenticated Dashboard.
+- Verified Browse Wines and the production wine catalog.
+- Verified external WineAPI search and external wine details.
+- Verified importing an external wine into the production database.
+- Verified imported wine data directly through Django and Heroku PostgreSQL.
+- Verified Personal Cellar CRUD:
+  - Create
+  - Read
+  - Update
+  - Delete
+- Verified deleting a `CellarEntry` does not delete the underlying shared `Wine` catalog record.
+- Verified Tasting Note CRUD:
+  - Create
+  - Read
+  - Update
+  - Delete
+- Verified Cellar and Tasting Note database changes directly through Django against Heroku PostgreSQL.
+- Verified production frontend-to-backend communication without observed CORS, JavaScript console, or network errors.
+
+### Production Validation Results
+
+- Django backend deployed and running with Gunicorn.
+- React frontend deployed and running with `serve`.
+- Heroku PostgreSQL database initialized and operational.
+- Production authentication flow operational.
+- WineAPI integration operational.
+- Wine catalog persistence operational.
+- Personal Cellar CRUD operational.
+- Tasting Note CRUD operational.
+- React Router production routing operational.
+- Production HTTPS operational.
+- `SECURE_HSTS_SECONDS` added with a conservative initial production value of `3600`.
+
+### Remaining Phase 15 Check
+
+Before Phase 15 is marked complete:
+
+- Deploy the final `SECURE_HSTS_SECONDS` Django settings change.
+- Verify the live production HSTS response header.
+- Run the final Django production deployment check.
+- Commit and push the final Phase 15 documentation/configuration changes.

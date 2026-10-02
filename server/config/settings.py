@@ -51,6 +51,8 @@ SECURE_PROXY_SSL_HEADER = (
     "https",
 )
 
+SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "0"))
+
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
